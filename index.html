@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sanny Hong · AI Engineer, LLM & Agentic Systems</title>
+<meta name="description" content="Sanny Hong, AI engineer in Singapore. Production LLM agents and ML systems, proven with ground-truth evaluation, cost caps and measured error. Projects, live demos and CV.">
+<meta property="og:title" content="Sanny Hong · AI Engineer, LLM & Agentic Systems">
+<meta property="og:description" content="Production LLM agents and ML systems, proven with ground-truth evaluation, cost caps and measured error.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1d26'/%3E%3Cpath d='M4 20h6l3-9 4 14 3-8h8' fill='none' stroke='%23e0912c' stroke-width='2.6' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: an instrument-panel portfolio. Narrow reading column for copy, wide "panels" for the live demos; the hero is a trend recorder that flags a fault. */
+:root{
+  --paper:#f3f5f4; --panel:#ffffff; --ink:#0f1d26; --muted:#56656f; --rule:#d5dcdf; --grid:#e6ebec;
+  --signal:#c4700f;        /* alarm amber: the one accent */
+  --water:#1f6f7a;         /* secondary, used for data lines */
+  --ok:#2b7a4b; --bad:#b33a2e;
+  --signal-soft:#fbeedd; --water-soft:#e2f0f1;
+  --f-display:"IBM Plex Sans Condensed","IBM Plex Sans","Arial Narrow",Arial,"PingFang SC","Hiragino Sans","Noto Sans SC","Noto Sans JP","Microsoft YaHei",sans-serif;
+  --f-body:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans","Noto Sans SC","Noto Sans JP","Microsoft YaHei",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0d161c; --panel:#132029; --ink:#e4ecef; --muted:#93a4ad; --rule:#25343e; --grid:#1b2a33;
+  --signal:#f0a24a; --water:#5fb7c1; --ok:#5cc58a; --bad:#ef7d70; --signal-soft:#3a2a17; --water-soft:#163037; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#0d161c; --panel:#132029; --ink:#e4ecef; --muted:#93a4ad; --rule:#25343e; --grid:#1b2a33;
+  --signal:#f0a24a; --water:#5fb7c1; --ok:#5cc58a; --bad:#ef7d70; --signal-soft:#3a2a17; --water-soft:#163037; color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{animation:none!important;transition:none!important} }
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(2.1rem,5.2vw,3.5rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(1.55rem,3vw,2.1rem);font-weight:700}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.lede{font-size:1.14rem;color:var(--muted);max-width:60ch}
+.tag{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tag b{color:var(--signal);font-weight:500}
+
+/* top bar */
+header.bar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+header.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:1.05rem;text-decoration:none}
+.brand svg{flex:none}
+nav.links{display:flex;gap:18px;font-size:.9rem}
+nav.links a{text-decoration:none;color:var(--muted)} nav.links a:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.lang button{all:unset;cursor:pointer;padding:4px 9px;font-size:.8rem;font-family:var(--f-mono);color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+@media (max-width:760px){ nav.links{display:none} }
+
+/* hero */
+.hero{padding-block:56px 40px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center}
+.hero .who{display:grid;gap:18px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:8px;font-weight:600;text-decoration:none;border:1px solid var(--ink);font-size:.95rem;cursor:pointer;background:none;color:var(--ink);font-family:var(--f-body)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn:hover{transform:translateY(-1px)}
+.proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:10px;border-top:1px solid var(--rule);padding-top:16px}
+.proof .n{font-family:var(--f-display);font-size:1.7rem;font-weight:700}
+.proof .l{font-size:.82rem;color:var(--muted);line-height:1.35}
+.recorder{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:14px 14px 10px;box-shadow:0 1px 0 var(--rule)}
+.recorder .head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.recorder canvas{width:100%;height:220px;display:block}
+.recorder .alert{margin-top:8px;font-family:var(--f-mono);font-size:.8rem;background:var(--signal-soft);color:var(--ink);border-left:3px solid var(--signal);padding:7px 10px;border-radius:0 6px 6px 0;min-height:2.4em}
+@media (max-width:880px){ .hero{grid-template-columns:minmax(0,1fr);padding-block:36px 28px} }
+
+section.block{padding-block:56px;border-top:1px solid var(--rule)}
+.sechead{display:grid;gap:10px;margin-bottom:28px;max-width:70ch}
+
+/* services */
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.svc{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:20px;display:grid;gap:12px;align-content:start}
+.svc .meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--f-mono);font-size:.74rem;padding:2px 8px;border-radius:4px;background:var(--water-soft);color:var(--water)}
+.chip.amber{background:var(--signal-soft);color:var(--signal)}
+.svc ul{margin:0;padding-left:18px;color:var(--muted);font-size:.92rem}
+.svc .from{font-size:.86rem;border-top:1px dashed var(--rule);padding-top:10px}
+.process{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:22px;counter-reset:step}
+.process li{list-style:none;border-top:2px solid var(--ink);padding-top:10px;font-size:.92rem;counter-increment:step}
+.process li::before{content:counter(step);font-family:var(--f-mono);color:var(--signal);display:block;font-size:.8rem}
+.process b{display:block;font-family:var(--f-display);font-size:1.02rem}
+@media (max-width:760px){ .process{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+/* cases */
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.proj{display:grid;gap:10px;align-content:start;padding:20px;border:1px solid var(--rule);border-radius:12px;background:var(--panel)}
+.proj .meta{display:flex;flex-wrap:wrap;gap:6px}
+.proj .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.proj .links .btn{padding:8px 14px;font-size:.88rem}
+.checked{font-size:.9rem;color:var(--ink);border-left:3px solid var(--water);padding-left:10px;margin-top:8px;max-width:62ch}
+.checked b{color:var(--water)}
+.cases{display:grid;gap:14px}
+.case{display:grid;grid-template-columns:200px minmax(0,1fr) 210px;gap:22px;padding:20px 0;border-bottom:1px solid var(--rule);align-items:start}
+.case:first-child{border-top:1px solid var(--rule)}
+.case .sector{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.case h3{margin-bottom:6px}
+.case p{color:var(--muted);font-size:.95rem;max-width:62ch}
+.case .stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.case .stack span{font-family:var(--f-mono);font-size:.72rem;border:1px solid var(--rule);padding:1px 7px;border-radius:4px;color:var(--muted)}
+.case .kpi{display:grid;gap:8px}
+.case .kpi div{display:grid}
+.case .kpi .v{font-family:var(--f-display);font-weight:700;font-size:1.3rem}
+.case .kpi .k{font-size:.78rem;color:var(--muted);line-height:1.3}
+@media (max-width:880px){ .case{grid-template-columns:minmax(0,1fr);gap:10px} .case .kpi{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+/* demos */
+.demo{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:20px;display:grid;gap:14px;margin-bottom:22px}
+.demo .top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:baseline}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.toggle{all:unset;cursor:pointer;font-size:.84rem;padding:5px 11px;border-radius:999px;border:1px solid var(--rule);color:var(--muted)}
+.toggle[aria-pressed="true"]{border-color:var(--signal);color:var(--ink);background:var(--signal-soft)}
+.toggle:focus-visible{outline:2px solid var(--signal)}
+.chartbox{position:relative;width:100%;overflow:hidden}
+.chartbox canvas{width:100%;height:280px;display:block}
+.demo-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px}
+@media (max-width:880px){ .demo-grid{grid-template-columns:minmax(0,1fr)} }
+.log{display:grid;gap:8px;max-height:300px;overflow:auto;align-content:start}
+.msg{background:var(--water-soft);border-radius:10px 10px 10px 2px;padding:8px 11px;font-size:.84rem}
+.msg .h{font-weight:600}
+.msg .s{color:var(--muted);font-family:var(--f-mono);font-size:.76rem}
+.score{display:flex;flex-wrap:wrap;gap:16px;font-size:.88rem;color:var(--muted)}
+.score b{color:var(--ink);font-family:var(--f-mono)}
+.gauge-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start}
+.gauge-wrap canvas{width:220px;height:440px;border-radius:8px;border:1px solid var(--rule);max-width:100%}
+.readout{display:grid;gap:12px}
+.readout .big{font-family:var(--f-display);font-size:2.4rem;font-weight:700}
+.readout label{display:grid;gap:4px;font-size:.88rem;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--signal)}
+@media (max-width:560px){ .gauge-wrap{grid-template-columns:minmax(0,1fr)} .gauge-wrap canvas{width:180px;height:360px;justify-self:center} }
+.note{font-size:.82rem;color:var(--muted)}
+
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px}
+.timeline{display:grid;gap:16px}
+.timeline .row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px}
+.timeline .when{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.timeline .what b{display:block}
+.timeline .what span{color:var(--muted);font-size:.92rem}
+.skills{display:flex;flex-wrap:wrap;gap:6px}
+.skills span{font-size:.82rem;border:1px solid var(--rule);border-radius:4px;padding:2px 8px}
+.langs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.langs div{border:1px solid var(--rule);border-radius:8px;padding:10px;text-align:center}
+.langs b{display:block;font-family:var(--f-display);font-size:1.2rem}
+.langs span{font-size:.78rem;color:var(--muted)}
+@media (max-width:880px){ .about{grid-template-columns:minmax(0,1fr)} .timeline .row{grid-template-columns:minmax(0,1fr);gap:2px} }
+
+/* contact */
+.contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.cards{display:grid;gap:10px}
+.cline{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px 14px}
+.cline .k{font-size:.78rem;color:var(--muted)}
+.cline .v{font-family:var(--f-mono);font-size:.9rem;word-break:break-all}
+.copy{all:unset;cursor:pointer;font-size:.8rem;border:1px solid var(--rule);padding:4px 10px;border-radius:6px;white-space:nowrap}
+.copy:focus-visible{outline:2px solid var(--signal)}
+form.brief{display:grid;gap:10px;background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:18px}
+form.brief label{display:grid;gap:4px;font-size:.86rem;color:var(--muted)}
+form.brief input,form.brief textarea,form.brief select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:8px 10px}
+form.brief textarea{min-height:110px;resize:vertical}
+.out{font-family:var(--f-mono);font-size:.8rem;white-space:pre-wrap;background:var(--paper);border:1px dashed var(--rule);padding:10px;border-radius:6px}
+@media (max-width:880px){ .contact{grid-template-columns:minmax(0,1fr)} }
+footer{border-top:1px solid var(--rule);padding-block:24px;color:var(--muted);font-size:.84rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Sanny Hong, home">
+      <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="6" fill="currentColor"/><path d="M4 20h6l3-9 4 14 3-8h8" fill="none" stroke="#e0912c" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <span>Sanny Hong</span>
+    </a>
+    <nav class="links" aria-label="Sections">
+      <a href="#projects" data-i18n="nav.projects">Projects</a>
+      <a href="#work" data-i18n="nav.work">Work</a>
+      <a href="#demos" data-i18n="nav.demos">Live demos</a>
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div class="who">
+      <div class="tag" data-i18n-html="hero.tag">AI engineer · LLM & agentic systems · Singapore · <b>EN / 中文 / 日本語</b></div>
+      <h1 data-i18n="hero.h1">AI systems that are measured, not guessed.</h1>
+      <p class="lede" data-i18n="hero.lede">I build LLM agents and machine-learning systems that run in production, and I prove they work: ground-truth checks on live data, cost caps on every request, and measured error on every model.</p>
+      <div class="cta">
+        <a class="btn primary" href="#projects" data-i18n="hero.cta1">See the projects</a>
+        <a class="btn" href="#demos" data-i18n="hero.cta2">Try a live demo</a>
+      </div>
+      <div class="proof">
+        <div><div class="n mono">19M</div><div class="l" data-i18n="proof.1">rows queried by a read-only production agent</div></div>
+        <div><div class="n mono">~1px</div><div class="l" data-i18n="proof.2">gauge-reading error, down from ~137px</div></div>
+        <div><div class="n mono">−84%</div><div class="l" data-i18n="proof.3">LLM tokens per question after an agent rewrite</div></div>
+      </div>
+    </div>
+    <figure class="recorder" aria-label="Animated sensor trend with an automatic fault flag" style="margin:0">
+      <div class="head"><span class="tag" data-i18n="rec.title">Live trend · reservoir level (m)</span><span class="tag mono" id="recClock">—</span></div>
+      <canvas id="rec" width="640" height="220"></canvas>
+      <figcaption class="alert" id="recAlert" aria-live="polite">—</figcaption>
+    </figure>
+  </div>
+
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="sechead">
+        <div class="tag" data-i18n="svc.tag">Fixed-price prototypes</div>
+        <h2 data-i18n="svc.h2">One scoped problem, one working system, two weeks.</h2>
+        <p class="lede" data-i18n="svc.lede">Every engagement ends with something running on your data, not a slide deck. You get the code, deployment notes and two weeks of fixes. Ongoing support is quoted separately.</p>
+      </div>
+      <div class="services" id="svcList"></div>
+      <ol class="process" style="padding:0;margin:26px 0 0">
+        <li><b data-i18n="p1.h">30-minute call</b><span data-i18n="p1.t">We pick one problem and the data it needs.</span></li>
+        <li><b data-i18n="p2.h">Fixed quote in 48 hours</b><span data-i18n="p2.t">Scope, deliverables and price in writing. 50% to start.</span></li>
+        <li><b data-i18n="p3.h">Demo at the end of week 1</b><span data-i18n="p3.t">Running on a sample of your data, so you can redirect early.</span></li>
+        <li><b data-i18n="p4.h">Handover in week 2</b><span data-i18n="p4.t">Deployed, documented, with two weeks of fixes included.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="sechead">
+        <div class="tag" data-i18n="proj.tag">Projects you can open</div>
+        <h2 data-i18n="proj.h2">Open the code, run the demo, check the numbers.</h2>
+        <p class="lede" data-i18n="proj.lede">Personal projects built in public. Each card says how the result is verified.</p>
+      </div>
+      <div class="projects" id="projList"></div>
+    </div>
+  </section>
+
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="sechead">
+        <div class="tag" data-i18n="work.tag">Production work</div>
+        <h2 data-i18n="work.h2">Systems in production, described without client names.</h2>
+        <p class="lede" data-i18n="work.lede">Client names, code and data stay private. For each system: what was built, how it was checked, and the measured result.</p>
+      </div>
+      <div class="cases" id="caseList"></div>
+    </div>
+  </section>
+
+  <section class="block" id="demos">
+    <div class="wrap">
+      <div class="sechead">
+        <div class="tag" data-i18n="demo.tag">Live demos · run in your browser</div>
+        <h2 data-i18n="demo.h2">Break the data and watch it get caught.</h2>
+        <p class="lede" data-i18n="demo.lede">Both demos run entirely in this page, on your device's CPU, with synthetic data. They are small versions of techniques used in the systems above.</p>
+      </div>
+
+      <div class="demo" aria-labelledby="d1h">
+        <div class="top">
+          <div><h3 id="d1h" data-i18n="d1.h">Sensor fault detector</h3><p class="note" data-i18n="d1.sub">Seven days of a reservoir level at 15-minute intervals. The first three days teach the normal daily cycle; faults are injected after that.</p></div>
+          <button type="button" class="btn" id="d1new" data-i18n="d1.new">New data</button>
+        </div>
+        <div class="controls" id="d1faults" role="group" aria-label="Faults to inject"></div>
+        <div class="demo-grid">
+          <div>
+            <div class="chartbox"><canvas id="d1c" width="900" height="280" aria-label="Sensor chart with detected faults"></canvas></div>
+            <div class="score" id="d1score" aria-live="polite"></div>
+          </div>
+          <div class="log" id="d1log" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="demo" aria-labelledby="d2h">
+        <div class="top">
+          <div><h3 id="d2h" data-i18n="d2.h">Flood gauge reader</h3><p class="note" data-i18n="d2.sub">A staff gauge from 0 to 800 cm with yellow reference blocks every metre. The reader scans the pixels and finds the water line, with no GPU and no model download.</p></div>
+        </div>
+        <div class="gauge-wrap">
+          <canvas id="d2c" width="220" height="440" aria-label="Rendered flood gauge with detected water line"></canvas>
+          <div class="readout">
+            <div><div class="tag" data-i18n="d2.est">Reading</div><div class="big mono" id="d2est">—</div><div class="note mono" id="d2err"></div></div>
+            <label><span data-i18n="d2.level">True water level (cm)</span><input type="range" id="d2lvl" min="40" max="760" value="315" step="1"></label>
+            <div class="controls" id="d2cond" role="group" aria-label="Conditions"></div>
+            <p class="note" data-i18n="d2.real">The production version of this used Florence-2 and SAM 2 on 777 field images across 11 conditions (night, rain, glare, debris, murky water and more).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap about">
+      <div>
+        <div class="sechead" style="margin-bottom:20px">
+          <div class="tag" data-i18n="about.tag">About</div>
+          <h2 data-i18n="about.h2">Hong Jiajia (Sanny)</h2>
+          <p class="lede" data-i18n="about.lede">AI engineer in Singapore. In the technical department of an industrial automation firm, I build and run LLM assistants, anomaly detection and computer vision for public water-infrastructure clients. Before that I led frontend work on banking systems used by more than 1,300 people.</p>
+        </div>
+        <div class="timeline" id="tl"></div>
+        <div class="cta" style="margin-top:22px">
+          <a class="btn" id="cvBtn" href="#" target="_blank" rel="noopener" data-i18n="about.cv">Download CV</a>
+          <a class="btn" href="#contact" data-i18n="about.hire">Hiring full-time? Get in touch</a>
+        </div>
+      </div>
+      <div style="display:grid;gap:22px;align-content:start">
+        <div><div class="tag" style="margin-bottom:8px" data-i18n="about.langs">Working languages</div>
+          <div class="langs"><div><b>EN</b><span data-i18n="l.en">Professional</span></div><div><b>中文</b><span data-i18n="l.zh">Native</span></div><div><b>日本語</b><span data-i18n="l.ja">Conversational (minor at ANU)</span></div></div></div>
+        <div><div class="tag" style="margin-bottom:8px" data-i18n="about.stack">Tools I ship with</div>
+          <div class="skills">
+            <span>Python</span><span>pandas</span><span>FastAPI</span><span>SQL Server</span><span>MariaDB</span><span>Docker Compose</span><span>Telegram Bot API</span><span>OpenAI · Anthropic APIs</span><span>Tool-calling agents</span><span>Florence-2</span><span>SAM 2</span><span>CUSUM / EWMA</span><span>React</span><span>TypeScript</span><span>Chart.js</span><span>Windows services</span><span>Graphviz</span>
+          </div></div>
+        <div><div class="tag" style="margin-bottom:8px" data-i18n="about.focus">Current focus</div>
+          <p class="note" style="font-size:.95rem" data-i18n="about.focusT">LLM systems engineering: evaluation, model routing and cost-aware agents, plus fast vision models on modest hardware.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap contact">
+      <div class="sechead" style="margin-bottom:0">
+        <div class="tag" data-i18n="c.tag">Contact</div>
+        <h2 data-i18n="c.h2">Hiring for an AI systems or agentic role? Let’s talk.</h2>
+        <p class="lede" data-i18n="c.lede">I reply within one working day, in English, Chinese or Japanese.</p>
+        <div class="cards" id="contactCards" style="margin-top:14px"></div>
+      </div>
+      <form class="brief" id="brief" novalidate>
+        <h3 data-i18n="f.h">Project brief</h3>
+        <label><span data-i18n="f.what">What do you need?</span>
+          <select id="f-type"><option value="sensor" data-i18n="f.o1">Sensor / IoT anomaly alerts</option><option value="bot" data-i18n="f.o2">Chatbot over our database or documents</option><option value="vision" data-i18n="f.o3">Computer vision on edge hardware</option><option value="data" data-i18n="f.o4">Data pipeline or dashboard</option><option value="job" selected data-i18n="f.o5">Full-time role</option></select></label>
+        <label><span data-i18n="f.data">Where does the data live today?</span><input id="f-data" data-i18n-ph="f.dataPh" placeholder="e.g. SQL Server historian, CSV exports, IP cameras"></label>
+        <label><span data-i18n="f.goal">What would success look like?</span><textarea id="f-goal" data-i18n-ph="f.goalPh" placeholder="e.g. operators get one Telegram alert per real fault instead of 40 SMS a night"></textarea></label>
+        <button class="btn primary" type="submit" data-i18n="f.submit">Write my brief</button>
+        <div class="out" id="briefOut" hidden></div>
+        <p class="note" data-i18n="f.note">This form doesn't send anything. It writes a short brief you can copy into an email or message.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>© <span id="yr"></span> Hong Jiajia (Sanny)</span><span data-i18n="foot">Built by hand. No trackers, no cookies.</span></div></footer>
+
+<script>
+/* ================= EDIT THESE BEFORE YOU DEPLOY ================= */
+const CONFIG = {
+  email:    "synhong43@gmail.com",                          // e.g. "hello@yourdomain.com" — shown as copyable text
+  linkedin: "https://www.linkedin.com/in/sanny-hong-020781187",                          // e.g. "https://www.linkedin.com/in/your-handle"
+  github:   "https://github.com/HSanny",
+  booking:  "",                          // optional scheduling link, e.g. Calendly
+  cvUrl:    "cv.pdf",                          // e.g. "cv.pdf" placed next to index.html; the CV button hides when empty
+  showServices: false                    // set false to hide the services section (e.g. until your work pass allows freelance work)
+};
+/* ================================================================ */
+
+const I18N = {
+en:{
+ "case.checked":"How it was checked",
+ "proj.soon":"Building now",
+ "proj.demo":"Live demo",
+ "proj.code":"Code",
+ "proj.verified":"How it is verified",
+ "proj.lede":"Personal projects built in public. Each card says how the result is verified.",
+ "proj.h2":"Open the code, run the demo, check the numbers.",
+ "proj.tag":"Projects you can open",
+ "nav.projects":"Projects",
+ "nav.services":"Services","nav.work":"Work","nav.demos":"Live demos","nav.about":"About","nav.contact":"Contact",
+ "hero.tag":"AI engineer · LLM & agentic systems · Singapore · <b>EN / 中文 / 日本語</b>",
+ "hero.h1":"AI systems that are measured, not guessed.",
+ "hero.lede":"I build LLM agents and machine-learning systems that run in production, and I prove they work: ground-truth checks on live data, cost caps on every request, and measured error on every model.",
+ "hero.cta1":"See the projects","hero.cta2":"Try a live demo",
+ "proof.1":"rows queried by a read-only production agent","proof.2":"gauge-reading error, down from ~137px","proof.3":"LLM tokens per question after an agent rewrite",
+ "rec.title":"Live trend · reservoir level (m)",
+ "rec.ok":"No faults · signal within expected daily band","rec.flat":"⚠ FLATLINE · value unchanged for {n} readings at {v} m · alert sent",
+ "svc.tag":"Fixed-price prototypes","svc.h2":"One scoped problem, one working system, two weeks.",
+ "svc.lede":"Every engagement ends with something running on your data, not a slide deck. You get the code, deployment notes and two weeks of fixes. Ongoing support is quoted separately.",
+ "svc.weeks":"2 weeks","svc.fixed":"Fixed quote","svc.youGet":"You get","svc.need":"I need from you",
+ "p1.h":"30-minute call","p1.t":"We pick one problem and the data it needs.",
+ "p2.h":"Fixed quote in 48 hours","p2.t":"Scope, deliverables and price in writing. 50% to start.",
+ "p3.h":"Demo at the end of week 1","p3.t":"Running on a sample of your data, so you can redirect early.",
+ "p4.h":"Handover in week 2","p4.t":"Deployed, documented, with two weeks of fixes included.",
+ "work.tag":"Production work","work.h2":"Systems in production, described without client names.","work.lede":"Client names, code and data stay private. For each system: what was built, how it was checked, and the measured result.",
+ "demo.tag":"Live demos · run in your browser","demo.h2":"Break the data and watch it get caught.",
+ "demo.lede":"Both demos run entirely in this page, on your device's CPU, with synthetic data. They are small versions of techniques used in the systems above.",
+ "d1.h":"Sensor fault detector","d1.sub":"Seven days of a reservoir level at 15-minute intervals. The first three days teach the normal daily cycle; faults are injected after that.","d1.new":"New data",
+ "f.flat":"Flatline","f.spike":"Spike","f.step":"Step change","f.drop":"Dropout","f.drift":"Slow drift",
+ "d1.caught":"Faults caught","d1.false":"False alarms","d1.time":"Run time","d1.none":"No faults injected. Pick one above.",
+ "d1.alert":"ALERT","d1.day":"Day",
+ "a.flat":"Value stuck at {v} m for {n} readings. Likely frozen transmitter or comms loss.",
+ "a.spike":"Single reading {d} from the expected value. Likely noise or a one-off glitch.",
+ "a.step":"Level shifted {d} and stayed there. Check recalibration, valve change or sensor swap.",
+ "a.drop":"{n} readings missing. Check data link or logger.",
+ "a.drift":"Gradual departure from the daily pattern, now {d}. Check fouling or calibration drift.",
+ "d2.h":"Flood gauge reader","d2.sub":"A staff gauge from 0 to 800 cm with yellow reference blocks every metre. The reader scans the pixels and finds the water line, with no GPU and no model download.",
+ "d2.est":"Reading","d2.level":"True water level (cm)","d2.err":"error {e} cm · {t} ms on CPU",
+ "c.rain":"Rain","c.glare":"Glare","c.murky":"Murky water","c.dusk":"Dusk",
+ "d2.real":"The production version of this used Florence-2 and SAM 2 on 777 field images across 11 conditions (night, rain, glare, debris, murky water and more).",
+ "about.tag":"About","about.h2":"Hong Jiajia (Sanny)",
+ "about.lede":"AI engineer in Singapore. In the technical department of an industrial automation firm, I build and run LLM assistants, anomaly detection and computer vision for public water-infrastructure clients. Before that I led frontend work on banking systems used by more than 1,300 people.",
+ "about.cv":"Download CV","about.hire":"Hiring full-time? Get in touch","about.langs":"Working languages","about.stack":"Tools I ship with","about.focus":"Current focus",
+ "about.focusT":"LLM systems engineering: evaluation, model routing and cost-aware agents, plus fast vision models on modest hardware.",
+ "l.en":"Professional","l.zh":"Native","l.ja":"Conversational (minor at ANU)",
+ "c.tag":"Contact","c.h2":"Hiring for an AI systems or agentic role? Let’s talk.","c.lede":"I reply within one working day, in English, Chinese or Japanese.",
+ "c.email":"Email","c.linkedin":"LinkedIn","c.github":"GitHub","c.booking":"Book a call","c.copy":"Copy","c.copied":"Copied","c.open":"Open","c.missing":"Add your email in CONFIG before publishing.",
+ "f.h":"Project brief","f.what":"What do you need?","f.o1":"Sensor / IoT anomaly alerts","f.o2":"Chatbot over our database or documents","f.o3":"Computer vision on edge hardware","f.o4":"Data pipeline or dashboard","f.o5":"Full-time role",
+ "f.data":"Where does the data live today?","f.dataPh":"e.g. SQL Server historian, CSV exports, IP cameras","f.goal":"What would success look like?","f.goalPh":"e.g. operators get one Telegram alert per real fault instead of 40 SMS a night",
+ "f.submit":"Write my brief","f.note":"This form doesn't send anything. It writes a short brief you can copy into an email or message.","f.copy":"Copy brief",
+ "f.tpl":"Hi Sanny,\n\nWe need: {type}\nOur data lives in: {data}\nSuccess would be: {goal}\n\nCan we book a 30-minute call?",
+ "foot":"Built by hand. No trackers, no cookies.",
+ "tl.1w":"Now","tl.1":"Software Engineer (AI) · industrial automation firm, Singapore","tl.1s":"Technical department. LLM assistants, anomaly detection, computer vision and alerting for public water-infrastructure clients, from data to Docker deployment.",
+ "tl.2w":"Before","tl.2":"Frontend Lead · GienTech Technology, Shanghai","tl.2s":"Seconded to a Singapore bank: React and TypeScript frontends for its financial-record and HR systems, 1,300+ users.",
+ "tl.3w":"Education","tl.3":"Bachelor of Information Technology · ANU","tl.3s":"Majors in computer science and mathematics, specialising in intelligent systems, with a minor in Japanese.",
+ "tl.4w":"Education","tl.4":"Master of IT in Business (AI) · SMU","tl.4s":"In progress, currently on leave."
+},
+zh:{
+ "case.checked":"怎么检验",
+ "proj.soon":"正在开发",
+ "proj.demo":"在线演示",
+ "proj.code":"代码",
+ "proj.verified":"怎么验证",
+ "proj.lede":"公开构建的个人项目。每张卡片都写明结果是怎么验证的。",
+ "proj.h2":"打开代码、运行演示、核对数字。",
+ "proj.tag":"可以打开看的项目",
+ "nav.projects":"项目",
+ "nav.services":"服务","nav.work":"项目","nav.demos":"在线演示","nav.about":"关于我","nav.contact":"联系",
+ "hero.tag":"AI 工程师 · LLM 与智能体系统 · 新加坡 · <b>EN / 中文 / 日本語</b>",
+ "hero.h1":"AI 系统，靠测量，不靠猜。",
+ "hero.lede":"我做能在生产环境长期运行的 LLM 智能体和机器学习系统，并且用证据证明它们是对的：用真实数据做 ground-truth 校验，每个请求都有成本上限，每个模型都有实测误差。",
+ "hero.cta1":"看项目","hero.cta2":"试试在线演示",
+ "proof.1":"行数据，由只读的生产智能体查询","proof.2":"水尺读数误差，原来约 137 像素","proof.3":"智能体重构后每个问题的 LLM token",
+ "rec.title":"实时曲线 · 水库水位（米）",
+ "rec.ok":"无异常 · 数值在日常波动范围内","rec.flat":"⚠ 数值冻结 · 连续 {n} 个读数停在 {v} 米 · 已发出告警",
+ "svc.tag":"固定价格原型","svc.h2":"一个明确的问题，一个能跑的系统，两周交付。",
+ "svc.lede":"每个项目的交付物都是在你的数据上跑起来的系统，不是 PPT。你会拿到代码、部署说明，以及两周的问题修复。长期维护另行报价。",
+ "svc.weeks":"2 周","svc.fixed":"固定报价","svc.youGet":"你会得到","svc.need":"需要你提供",
+ "p1.h":"30 分钟沟通","p1.t":"一起选定一个问题，以及需要的数据。",
+ "p2.h":"48 小时内给出固定报价","p2.t":"范围、交付物和价格都写清楚。先付 50%。",
+ "p3.h":"第一周末演示","p3.t":"用你的部分数据跑起来，方便尽早调整方向。",
+ "p4.h":"第二周交付","p4.t":"部署完成并附文档，含两周问题修复。",
+ "work.tag":"生产环境项目","work.h2":"已在生产环境运行的系统（隐去客户名称）","work.lede":"客户名称、代码和数据均保密。每个系统都写明：做了什么、怎么检验、实测结果。",
+ "demo.tag":"在线演示 · 在你的浏览器里运行","demo.h2":"动手把数据弄坏，看它怎么被抓出来。",
+ "demo.lede":"两个演示都完全在本页面运行，用的是你设备的 CPU 和模拟数据。它们是上面那些系统所用方法的简化版。",
+ "d1.h":"传感器故障检测","d1.sub":"一个水库水位 7 天的数据，每 15 分钟一个点。前 3 天用来学习正常的日变化规律，之后注入故障。","d1.new":"换一组数据",
+ "f.flat":"数值冻结","f.spike":"尖峰","f.step":"阶跃","f.drop":"数据缺失","f.drift":"缓慢漂移",
+ "d1.caught":"抓到的故障","d1.false":"误报","d1.time":"运行耗时","d1.none":"还没有注入故障，在上面选一个。",
+ "d1.alert":"告警","d1.day":"第",
+ "a.flat":"数值停在 {v} 米，持续 {n} 个读数。可能是变送器卡死或通讯中断。",
+ "a.spike":"单个读数偏离预期 {d}。可能是噪声或偶发干扰。",
+ "a.step":"水位突然偏移 {d} 并保持不变。请检查是否重新校准、阀门动作或更换了传感器。",
+ "a.drop":"缺失 {n} 个读数。请检查数据链路或采集器。",
+ "a.drift":"逐渐偏离日常规律，目前偏差 {d}。请检查结垢或校准漂移。",
+ "d2.h":"洪水标尺读数","d2.sub":"一根 0–800 厘米的水尺，每米有黄色参考色块。程序逐像素扫描并找到水面线，不用 GPU，也不用下载模型。",
+ "d2.est":"读数","d2.level":"实际水位（厘米）","d2.err":"误差 {e} 厘米 · CPU 耗时 {t} 毫秒",
+ "c.rain":"下雨","c.glare":"反光","c.murky":"浑浊","c.dusk":"傍晚",
+ "d2.real":"正式版本使用 Florence-2 和 SAM 2，在 777 张现场图片、11 种条件（夜间、雨天、反光、杂物、浑水等）上验证。",
+ "about.tag":"关于我","about.h2":"Hong Jiajia（Sanny）",
+ "about.lede":"新加坡的 AI 工程师。在一家工业自动化公司的技术部门，为公共水务基础设施客户开发和运营 LLM 助手、异常检测和计算机视觉系统。此前负责银行系统的前端开发，用户超过 1,300 人。",
+ "about.cv":"下载简历","about.hire":"招聘全职？欢迎联系","about.langs":"工作语言","about.stack":"常用工具","about.focus":"目前专注",
+ "about.focusT":"LLM 系统工程：评估体系、模型路由和有成本意识的智能体；以及在普通硬件上跑得快的视觉模型。",
+ "l.en":"工作语言","l.zh":"母语","l.ja":"日常会话（ANU 辅修）",
+ "c.tag":"联系","c.h2":"在招 AI 系统或智能体方向的工程师？欢迎联系。","c.lede":"一个工作日内回复，中文、英文、日文都可以。",
+ "c.email":"邮箱","c.linkedin":"LinkedIn","c.github":"GitHub","c.booking":"预约通话","c.copy":"复制","c.copied":"已复制","c.open":"打开","c.missing":"发布前请在 CONFIG 中填写邮箱。",
+ "f.h":"项目需求","f.what":"你需要什么？","f.o1":"传感器 / IoT 异常告警","f.o2":"基于数据库或文档的问答机器人","f.o3":"边缘设备上的视觉识别","f.o4":"数据管道或看板","f.o5":"全职职位",
+ "f.data":"数据现在存在哪里？","f.dataPh":"例如 SQL Server 历史库、CSV 导出、网络摄像头","f.goal":"做成什么样算成功？","f.goalPh":"例如值班人员每个真实故障只收到一条 Telegram 告警，而不是一晚 40 条短信",
+ "f.submit":"生成需求摘要","f.note":"这个表单不会发送任何内容，只会生成一段摘要，方便你复制到邮件或消息里。","f.copy":"复制摘要",
+ "f.tpl":"Sanny 你好，\n\n我们需要：{type}\n数据目前在：{data}\n成功的标准：{goal}\n\n方便约一个 30 分钟的通话吗？",
+ "foot":"手工搭建。没有追踪器，没有 Cookie。",
+ "tl.1w":"现在","tl.1":"软件工程师（AI 方向）· 工业自动化公司，新加坡","tl.1s":"技术部门。为公共水务基础设施客户做 LLM 助手、异常检测、计算机视觉和告警系统，从数据到 Docker 部署。",
+ "tl.2w":"之前","tl.2":"前端负责人 · GienTech Technology，上海","tl.2s":"派驻新加坡一家银行：为其财务记录系统和人事系统开发 React + TypeScript 前端，用户 1,300+。",
+ "tl.3w":"教育","tl.3":"信息技术学士 · 澳大利亚国立大学","tl.3s":"主修计算机科学和数学，专攻智能系统，辅修日语。",
+ "tl.4w":"教育","tl.4":"商业信息技术硕士（AI 方向）· 新加坡管理大学","tl.4s":"在读，目前休学中。"
+},
+ja:{
+ "case.checked":"検証方法",
+ "proj.soon":"開発中",
+ "proj.demo":"ライブデモ",
+ "proj.code":"コード",
+ "proj.verified":"検証方法",
+ "proj.lede":"公開で作っている個人プロジェクト。各カードに検証方法を書いています。",
+ "proj.h2":"コードを開き、デモを動かし、数字を確かめる。",
+ "proj.tag":"開いて確かめられるプロジェクト",
+ "nav.projects":"プロジェクト",
+ "nav.services":"サービス","nav.work":"実績","nav.demos":"ライブデモ","nav.about":"プロフィール","nav.contact":"お問い合わせ",
+ "hero.tag":"AI エンジニア · LLM・エージェントシステム · シンガポール · <b>EN / 中文 / 日本語</b>",
+ "hero.h1":"推測ではなく、測って証明する AI システム。",
+ "hero.lede":"本番で動き続ける LLM エージェントと機械学習システムを作り、正しく動くことを証拠で示します。実データでのグラウンドトゥルース検証、リクエストごとのコスト上限、モデルごとの実測誤差。",
+ "hero.cta1":"プロジェクトを見る","hero.cta2":"ライブデモを試す",
+ "proof.1":"行のデータを読み取り専用の本番エージェントが照会","proof.2":"量水標の読み取り誤差（以前は約 137px）","proof.3":"エージェント再設計後の 1 質問あたり LLM トークン",
+ "rec.title":"リアルタイム波形 · 貯水池の水位（m）",
+ "rec.ok":"異常なし · 日内変動の想定範囲内","rec.flat":"⚠ 値の固着 · {n} 回連続で {v} m のまま · アラート送信済み",
+ "svc.tag":"固定価格のプロトタイプ","svc.h2":"課題を一つに絞り、動くシステムを 2 週間で。",
+ "svc.lede":"納品物はスライドではなく、御社のデータで動くシステムです。コード、導入手順書、2 週間の不具合修正が含まれます。継続保守は別途お見積りします。",
+ "svc.weeks":"2 週間","svc.fixed":"固定見積り","svc.youGet":"納品物","svc.need":"ご用意いただくもの",
+ "p1.h":"30 分の打ち合わせ","p1.t":"課題を一つ選び、必要なデータを確認します。",
+ "p2.h":"48 時間以内に固定見積り","p2.t":"範囲・納品物・金額を書面で。着手時に 50%。",
+ "p3.h":"1 週目の終わりにデモ","p3.t":"御社データの一部で動かし、早めに方向修正できます。",
+ "p4.h":"2 週目に納品","p4.t":"導入・ドキュメント込み。2 週間の修正対応付き。",
+ "work.tag":"本番環境での実績","work.h2":"本番稼働中のシステム（顧客名は非公開）","work.lede":"顧客名・コード・データは非公開です。各システムについて、作ったもの・検証方法・実測結果を記載しています。",
+ "demo.tag":"ライブデモ · ブラウザで動作","demo.h2":"データを壊して、検知される様子を見てください。",
+ "demo.lede":"どちらのデモも、このページ内でお使いの端末の CPU と合成データだけで動きます。上記システムで使っている手法の簡易版です。",
+ "d1.h":"センサー故障検知","d1.sub":"貯水池の水位 7 日分（15 分間隔）。最初の 3 日で通常の日内パターンを学習し、その後に故障を注入します。","d1.new":"データを再生成",
+ "f.flat":"値の固着","f.spike":"スパイク","f.step":"段差","f.drop":"欠測","f.drift":"緩やかなドリフト",
+ "d1.caught":"検知した故障","d1.false":"誤報","d1.time":"処理時間","d1.none":"故障が注入されていません。上から選んでください。",
+ "d1.alert":"アラート","d1.day":"",
+ "a.flat":"値が {v} m のまま {n} 回連続。伝送器の固着か通信断の可能性。",
+ "a.spike":"1 点だけ想定値から {d} 外れています。ノイズまたは一時的な異常の可能性。",
+ "a.step":"水位が {d} ずれたまま戻りません。再校正、バルブ操作、センサー交換を確認してください。",
+ "a.drop":"{n} 件の欠測。通信回線またはロガーを確認してください。",
+ "a.drift":"日内パターンから徐々に外れ、現在 {d}。汚れや校正ずれを確認してください。",
+ "d2.h":"洪水量水標の読み取り","d2.sub":"0〜800 cm の量水標（1 m ごとに黄色の目印）。画素を走査して水面を検出します。GPU もモデルのダウンロードも不要です。",
+ "d2.est":"読み取り値","d2.level":"実際の水位（cm）","d2.err":"誤差 {e} cm · CPU で {t} ms",
+ "c.rain":"雨","c.glare":"反射","c.murky":"濁り","c.dusk":"夕方",
+ "d2.real":"本番版では Florence-2 と SAM 2 を使い、現場画像 777 枚・11 条件（夜間、雨、反射、漂流物、濁水など）で検証しました。",
+ "about.tag":"プロフィール","about.h2":"Hong Jiajia（Sanny）",
+ "about.lede":"シンガポールの AI エンジニア。産業オートメーション企業の技術部門で、公共水道インフラの顧客向けに LLM アシスタント、異常検知、画像認識を開発・運用しています。以前は利用者 1,300 人超の銀行システムでフロントエンドを率いていました。",
+ "about.cv":"履歴書をダウンロード","about.hire":"正社員採用のご相談はこちら","about.langs":"対応言語","about.stack":"主な技術","about.focus":"現在の関心",
+ "about.focusT":"LLM システムエンジニアリング：評価、モデルルーティング、コストを意識したエージェント。そして手頃なハードウェアで速く動く画像モデル。",
+ "l.en":"ビジネス","l.zh":"ネイティブ","l.ja":"日常会話（ANU で副専攻）",
+ "c.tag":"お問い合わせ","c.h2":"AI システム・エージェント領域で採用中ですか？ぜひご連絡ください。","c.lede":"1 営業日以内に、日本語・英語・中国語で返信します。",
+ "c.email":"メール","c.linkedin":"LinkedIn","c.github":"GitHub","c.booking":"打ち合わせを予約","c.copy":"コピー","c.copied":"コピーしました","c.open":"開く","c.missing":"公開前に CONFIG にメールアドレスを入力してください。",
+ "f.h":"ご相談内容","f.what":"必要なもの","f.o1":"センサー / IoT の異常検知アラート","f.o2":"データベースや文書に答えるチャットボット","f.o3":"エッジ機器での画像認識","f.o4":"データパイプラインまたはダッシュボード","f.o5":"正社員としての採用",
+ "f.data":"データの保存場所","f.dataPh":"例：SQL Server のヒストリアン、CSV 出力、IP カメラ","f.goal":"成功の基準","f.goalPh":"例：夜間 40 件の SMS ではなく、実際の故障ごとに Telegram アラート 1 件",
+ "f.submit":"相談内容をまとめる","f.note":"このフォームは何も送信しません。メールやメッセージに貼り付けられる要約を作成するだけです。","f.copy":"要約をコピー",
+ "f.tpl":"Sanny さん\n\n必要なもの：{type}\nデータの保存場所：{data}\n成功の基準：{goal}\n\n30 分ほどお打ち合わせできますか。",
+ "foot":"手作りのサイトです。トラッカーも Cookie も使っていません。",
+ "tl.1w":"現在","tl.1":"ソフトウェアエンジニア（AI）· 産業オートメーション企業（シンガポール）","tl.1s":"技術部門。公共水道インフラの顧客向けに、LLM アシスタント、異常検知、画像認識、アラートをデータから Docker 導入まで担当。",
+ "tl.2w":"以前","tl.2":"フロントエンドリード · GienTech Technology（上海）","tl.2s":"シンガポールの銀行に出向。財務記録システムと人事システムの React / TypeScript フロントエンドを担当。利用者 1,300 人以上。",
+ "tl.3w":"学歴","tl.3":"Bachelor of Information Technology · オーストラリア国立大学","tl.3s":"計算機科学と数学を専攻、知能システムを専門に、日本語を副専攻。",
+ "tl.4w":"学歴","tl.4":"Master of IT in Business（AI）· シンガポール経営大学","tl.4s":"在学中（現在休学）。"
+}};
+
+const SERVICES=[
+ {id:"sensor", chip:{en:"Sensors · IoT · SCADA",zh:"传感器 · IoT · SCADA",ja:"センサー · IoT · SCADA"},
+  h:{en:"Sensor anomaly alerts",zh:"传感器异常告警",ja:"センサー異常アラート"},
+  p:{en:"Turn a noisy historian into a short list of real faults: frozen values, dropouts, steps, drift and spikes, each with a plot and a reason.",zh:"把杂乱的历史数据变成一份真正需要处理的故障清单：数值冻结、缺失、阶跃、漂移、尖峰，每条都附曲线图和原因。",ja:"ノイズの多いヒストリアンを、本当に対応すべき故障の短いリストに。固着・欠測・段差・ドリフト・スパイクを、グラフと理由付きで通知します。"},
+  get:{en:["Detector tuned on your history","Telegram, SMS or email alerts with plots","Operator feedback buttons for labelling"],zh:["基于你的历史数据调好的检测器","附曲线图的 Telegram / 短信 / 邮件告警","值班人员一键反馈，积累标注数据"],ja:["御社の履歴データで調整した検知器","グラフ付きの Telegram / SMS / メール通知","オペレーターがラベル付けできるフィードバックボタン"]},
+  need:{en:"Read-only access to 1–3 months of data and any known incident list.",zh:"1–3 个月数据的只读权限，以及已知故障记录（如有）。",ja:"1〜3 か月分データの読み取り権限と、既知の障害一覧（あれば）。"}},
+ {id:"bot", chip:{en:"LLM agents · RAG",zh:"LLM 智能体 · RAG",ja:"LLM エージェント · RAG"},
+  h:{en:"Ops chatbot over your data",zh:"基于你数据的运维机器人",ja:"自社データに答える運用ボット"},
+  p:{en:"Ask \"how many work orders did Alex close at Site 4 last month?\" in Telegram, WhatsApp or a web page, and get the number, a chart or a PDF.",zh:"在 Telegram、WhatsApp 或网页上问\"上个月 Alex 在 4 号站关了几张工单？\"，直接得到数字、图表或 PDF。",ja:"「先月、Alex がサイト 4 で完了した作業指示は何件？」と Telegram・WhatsApp・Web で聞くと、数値・グラフ・PDF で答えます。"},
+  get:{en:["Tool-calling agent on a read-only DB user","Per-question cost cap and usage log","Charts and paginated PDF reports"],zh:["只读数据库账号上的工具调用智能体","单个问题成本上限和用量日志","图表和分页 PDF 报告"],ja:["読み取り専用 DB ユーザーで動くツール呼び出しエージェント","質問ごとのコスト上限と利用ログ","グラフとページ分割 PDF レポート"]},
+  need:{en:"A read-only database login or a folder of documents, plus 20 real questions your team asks.",zh:"一个只读数据库账号或一批文档，以及团队常问的 20 个真实问题。",ja:"読み取り専用の DB ログインまたは文書フォルダと、現場でよく出る質問 20 件。"}},
+ {id:"vision", chip:{en:"Computer vision · edge",zh:"视觉识别 · 边缘",ja:"画像認識 · エッジ"},
+  h:{en:"Vision on modest hardware",zh:"普通硬件上的视觉识别",ja:"手頃な機器で動く画像認識"},
+  p:{en:"Read gauges, count items, check fill levels or flag defects from cameras you already have, on a CPU box or small edge device.",zh:"用现有的摄像头读表、计数、检查液位或标记缺陷，跑在一台 CPU 主机或小型边缘设备上。",ja:"既存のカメラで計器の読み取り、計数、液面確認、不良検出を。CPU マシンや小型エッジ機器で動かします。"},
+  get:{en:["Pipeline validated on your images","Accuracy report by condition (night, rain, glare)","Deployable container or script"],zh:["在你的图片上验证过的处理流程","按条件（夜间、雨天、反光）分列的准确率报告","可部署的容器或脚本"],ja:["御社の画像で検証したパイプライン","条件別（夜間・雨・反射）の精度レポート","導入可能なコンテナまたはスクリプト"]},
+  need:{en:"100–500 sample images covering the conditions you care about.",zh:"100–500 张覆盖关键场景的样本图片。",ja:"重要な条件を網羅したサンプル画像 100〜500 枚。"}},
+ {id:"data", chip:{en:"SQL Server · pipelines",zh:"SQL Server · 数据管道",ja:"SQL Server · パイプライン"},
+  h:{en:"Time-series data rescue",zh:"时序数据整理",ja:"時系列データの立て直し"},
+  p:{en:"Move years of CSVs or a slow historian into a schema built for time series, with rollups and a dashboard people actually open.",zh:"把多年的 CSV 或很慢的历史库迁移到专为时序设计的结构，加上汇总表和一个大家真的会打开的看板。",ja:"長年の CSV や遅いヒストリアンを、時系列向けのスキーマへ。集計テーブルと、実際に使われるダッシュボード付き。"},
+  get:{en:["Star schema with columnstore and partitioning","Resumable backfill and incremental loader","Dashboard of the 5 numbers you check daily"],zh:["列存储加分区的星型模型","可断点续传的回填和增量加载","展示每天必看的 5 个数字的看板"],ja:["カラムストアとパーティション付きスタースキーマ","再開可能なバックフィルと差分ロード","毎日見る 5 つの数値のダッシュボード"]},
+  need:{en:"Sample exports and access to the target database server.",zh:"样本导出文件，以及目标数据库服务器的访问权限。",ja:"サンプル出力と、移行先 DB サーバーへのアクセス。"}}
+];
+
+const CASES=[
+ {sector:{en:"Public water infrastructure",zh:"公共水务基础设施",ja:"公共水道インフラ"},
+  h:{en:"Fleet-wide sensor anomaly alerting",zh:"全网传感器异常告警",ja:"全センサーの異常アラート"},
+  p:{en:"Hourly detection across about 500 water sensors, delivered by SMS and Telegram with plots. After a heavy-rain night flooded operators with false alerts, I added six noise rules that cut alert volume by 96% without dropping real events.",zh:"每小时检测约 500 个水务传感器，通过短信和 Telegram 发送附图告警。一次暴雨夜误报刷屏后，我加了六条噪声规则，告警量减少 96%，真实事件一个没漏。",ja:"約 500 台の水道センサーを毎時検知し、グラフ付きで SMS と Telegram に通知。豪雨の夜に誤報が殺到した後、6 つのノイズ規則を追加し、実際の事象を落とさずに通知量を 96% 削減しました。"},
+  v:{"en": "Back-tested against 25 historical alerts before go-live (92% match), then re-checked after the noise rules to confirm no real event was dropped.", "zh": "上线前用 25 次历史告警回测（吻合率 92%）；加噪声规则后再次核对，确认没有漏掉真实事件。", "ja": "稼働前に過去 25 件のアラートで検証（一致率 92%）。ノイズ規則の追加後も再検証し、実際の事象を落としていないことを確認。"},
+  stack:["Python","Docker","SQL Server","SMB/CIFS","Telegram"],
+  kpi:[["92%",{en:"match with 25 historical alerts",zh:"与 25 次历史告警的吻合率",ja:"過去 25 件のアラートとの一致率"}],["−96%",{en:"alert volume after noise rules",zh:"噪声规则后的告警量",ja:"ノイズ規則後の通知量"}]]},
+ {sector:{en:"Public water infrastructure",zh:"公共水务基础设施",ja:"公共水道インフラ"},
+  h:{en:"Signature-based fault detector with an operator bot",zh:"基于故障特征的检测器加值班机器人",ja:"故障シグネチャ検知とオペレーター用ボット"},
+  p:{en:"Replaced an Isolation Forest that kept flagging normal pump cycles with named fault signatures (flatline, dropout, step, transient, stuck) grounded in CUSUM and EWMA control charts. Operators use a two-way Telegram bot to ask why a sensor alerted, see its two-year history, and label alerts for future supervised training.",zh:"原来的 Isolation Forest 总把正常的泵启停当成异常。我改成有名字的故障特征（冻结、缺失、阶跃、瞬变、卡死），以 CUSUM 和 EWMA 控制图为依据。值班人员通过双向 Telegram 机器人询问告警原因、查看传感器两年历史，并给告警打标签，为后续监督学习积累数据。",ja:"正常なポンプ周期を誤検知し続けていた Isolation Forest を、CUSUM と EWMA 管理図に基づく名前付き故障シグネチャ（固着・欠測・段差・過渡・スタック）に置き換えました。オペレーターは双方向の Telegram ボットで、アラートの理由や 2 年分の履歴を確認し、将来の教師あり学習用にラベルを付けられます。"},
+  v:{"en": "Every alert names the signature and shows the chart that triggered it; operators label alerts, which builds a ground-truth set for supervised training.", "zh": "每条告警都写明触发的故障特征并附图；值班人员给告警打标签，逐步积累成监督学习用的标准答案集。", "ja": "各アラートに検知したシグネチャと根拠のグラフを表示。オペレーターのラベル付けで、教師あり学習用の正解データが蓄積されます。"},
+  stack:["Python","FastAPI","SQL Server","Docker Compose","LLM explanations"],
+  kpi:[["108M",{en:"readings backfilled, resumable",zh:"条读数完成可续传回填",ja:"件の読み取り値を再開可能にバックフィル"}],["445 → 69",{en:"anomalies to alerts on the first full run",zh:"首次全量运行：异常数 → 告警数",ja:"初回全件実行での異常 → 通知"}]]},
+ {sector:{en:"Maintenance operations",zh:"设备维护运营",ja:"保守運用"},
+  h:{en:"Agentic chatbot over a work-order database",zh:"基于工单数据库的智能体机器人",ja:"作業指示データベースに答えるエージェント型ボット"},
+  p:{en:"Rebuilt a single-shot RAG bot into a tool-calling agent with an aggregation engine, charts, PDF reports and fuzzy name matching. Fixed a silent join error that had placed every work order at the wrong site. Compacting tool results and gating tools by keyword cut tokens per question from 232,809 to 36,282.",zh:"把单轮 RAG 机器人重构成工具调用智能体，加入聚合引擎、图表、PDF 报告和模糊人名匹配。修复了一个让所有工单都显示在错误站点的隐性关联错误。通过压缩工具返回结果、按关键词开放工具，每个问题的 token 从 232,809 降到 36,282。",ja:"単発の RAG ボットを、集計エンジン・グラフ・PDF レポート・あいまい人名照合を備えたツール呼び出しエージェントに再構築。全作業指示が誤った拠点に表示されていた結合ミスも修正しました。ツール結果の圧縮とキーワードによるツール制御で、1 質問あたりのトークンを 232,809 から 36,282 に削減。"},
+  v:{"en": "Ground-truth SQL scripts check the agent’s answers on live data. They caught the silent mis-join, fixed with a context file that tells the agent how the tables relate.", "zh": "用 ground-truth SQL 脚本在真实数据上核对智能体的答案。正是它抓到了隐性的关联错误，后来用一个描述表与表关系的 context 文件修复。", "ja": "グラウンドトゥルースの SQL スクリプトで、エージェントの回答を実データで照合。これで結合ミスを発見し、テーブル間の関係を記述したコンテキストファイルで修正しました。"},
+  stack:["Python","MariaDB","OpenAI","Telegram","matplotlib"],
+  kpi:[["−84%",{en:"tokens per question",zh:"每个问题的 token",ja:"1 質問あたりのトークン"}],["46",{en:"sites resolved correctly after the join fix",zh:"个站点在修复关联后正确识别",ja:"拠点を結合修正後に正しく識別"}]]},
+ {sector:{en:"Industrial SCADA",zh:"工业 SCADA",ja:"産業用 SCADA"},
+  h:{en:"Offline data-rate alarm with a GSM modem",zh:"离线数据速率告警（GSM 短信猫）",ja:"GSM モデムによるオフラインのデータレート監視"},
+  p:{en:"A Windows service that watches hourly ingestion across every tag in monthly-partitioned historian databases and texts the on-call group through a serial GSM modem, on a PC with no internet access. Includes retry and backoff, a 12-hour cooldown and a compressed audit trail.",zh:"一个 Windows 服务，监控按月分库的历史数据库中所有标签的每小时入库量，通过串口 GSM 短信猫给值班组发短信，运行在一台不联网的电脑上。包含重试退避、12 小时冷却和压缩审计记录。",ja:"月別に分割されたヒストリアンの全タグについて毎時の取り込み量を監視し、シリアル GSM モデムで当番グループに SMS を送る Windows サービス。インターネット接続のない PC で稼働。リトライ・バックオフ、12 時間のクールダウン、圧縮監査ログ付き。"},
+  v:{"en": "Every check and every SMS is written to a compressed audit trail, with retry and backoff, so missed alarms can be traced.", "zh": "每次检查和每条短信都写入压缩审计记录，带重试退避，漏报可以追查。", "ja": "すべてのチェックと SMS を圧縮監査ログに記録（リトライ・バックオフ付き）。通知漏れを追跡できます。"},
+  stack:["Python","Windows service","SQL Server","GSM modem"],
+  kpi:[["0",{en:"internet connections required",zh:"不需要联网",ja:"インターネット接続は不要"}],["12h",{en:"cooldown to stop alert storms",zh:"冷却时间，防止告警风暴",ja:"アラート連発を防ぐクールダウン"}]]},
+ {sector:{en:"Flood monitoring research",zh:"洪水监测研究",ja:"洪水監視の研究"},
+  h:{en:"Water level from flood-gauge photos",zh:"从洪水标尺照片读取水位",ja:"量水標の写真から水位を読む"},
+  p:{en:"A vision pipeline that finds the gauge, segments the water surface and converts it to centimetres on a 0–800 cm staff gauge, tested across night, rain, glare and debris conditions.",zh:"一套视觉流程：先定位水尺，再分割水面，最后换算成 0–800 厘米标尺上的读数，在夜间、雨天、反光、漂浮物等条件下测试。",ja:"量水標を検出し、水面をセグメンテーションして、0〜800 cm の目盛りに換算する画像パイプライン。夜間・雨・反射・漂流物の条件で検証。"},
+  v:{"en": "Measured on 777 field images across 11 conditions; the CPU-only re-engineering kept the same accuracy on the same test set.", "zh": "在 777 张现场图片、11 种条件下实测；改为纯 CPU 运行后，在同一测试集上精度不变。", "ja": "11 条件・777 枚の現場画像で実測。CPU のみへの再設計後も、同じテストセットで精度は同等でした。"},
+  stack:["Florence-2","SAM 2","Python"],
+  kpi:[["777",{en:"field images",zh:"张现场图片",ja:"枚の現場画像"}],["11",{en:"lighting and weather conditions",zh:"种光照和天气条件",ja:"種類の照明・天候条件"}]]}
+];
+
+const PROJECTS=[
+ {h:{en:"Agentic SQL demo",zh:"智能体 SQL 演示",ja:"エージェント SQL デモ"},
+  p:{en:"Ask a question about a synthetic operations database. A read-only agent writes the query and shows its trace and cost, and a ground-truth panel checks the answer.",zh:"对一个模拟的运维数据库提问。只读智能体写出查询，展示推理过程和花费，ground-truth 面板核对答案。",ja:"模擬の運用データベースに質問すると、読み取り専用エージェントがクエリを書き、推論過程とコストを表示。グラウンドトゥルースのパネルが回答を照合します。"},
+  v:{en:"Every answer compared with a hand-written SQL query; a per-request cost meter stops the agent at its cap.",zh:"每个答案都和人工写的 SQL 结果对比；每个请求都有成本计量，到上限就停。",ja:"すべての回答を手書きの SQL と照合。リクエストごとのコストメーターが上限でエージェントを止めます。"},
+  stack:["Python","LLM tool calling","SQLite","Evals"], soon:true},
+ {h:{en:"Forecasting Engine",zh:"预测引擎",ja:"予測エンジン"},
+  p:{en:"A natural-language agent over a dataset-agnostic recommender and demand forecaster. It answers with evidence and refuses when nothing in the catalogue matches.",zh:"建立在通用推荐器和需求预测器之上的自然语言智能体。回答都附上证据；目录里找不到匹配时，它会拒绝回答而不是编造。",ja:"データセットに依存しない推薦・需要予測の上に載った自然言語エージェント。根拠付きで答え、カタログに該当がなければ回答を拒否します。"},
+  v:{en:"12 deterministic tests; every answer carries its intent, the tool that ran and the evidence item IDs.",zh:"12 个确定性测试；每个回答都带有意图、调用的工具和证据条目 ID。",ja:"12 件の決定的テスト。各回答に意図・実行したツール・根拠のアイテム ID が付きます。"},
+  stack:["Python","NumPy","Retrieval","Agents"], code:"https://github.com/HSanny/forecasting-engine"},
+ {h:{en:"TapeSense · investing-logic app",zh:"盘感 · 投资逻辑 App",ja:"TapeSense · 投資ロジックアプリ"},
+  p:{en:"An app in English and Chinese that explains how data releases move rates, the dollar, gold, stocks and Bitcoin, then checks each explanation against real market moves.",zh:"一个中英双语 App：讲清楚经济数据怎样一步步影响利率、美元、黄金、股票和比特币，再用真实行情检验每一个解释。",ja:"経済指標が金利・ドル・金・株・ビットコインにどう波及するかを英語と中国語で解説し、各説明を実際の値動きで検証するアプリ。"},
+  v:{en:"56 automated tests; each event’s 15-minute, 1-hour and 1-day reaction is measured from market data and marked matched or missed.",zh:"56 个自动化测试；每个事件发生后 15 分钟、1 小时、1 天的真实反应由行情数据测出，并标记「符合 / 不符」。",ja:"56 件の自動テスト。各イベント後 15 分・1 時間・1 日の反応を市場データから測定し、「一致 / 不一致」を表示します。"},
+  stack:["React Native","TypeScript","Market data","i18n"], demo:"https://tapesense--preview.expo.app"},
+ {h:{en:"Motion Analyser",zh:"运动分析器",ja:"モーションアナライザー"},
+  p:{en:"Turns one camera into an event stream: detection and tracking feed line-crossing, zone-dwell and speed analytics.",zh:"把一台摄像头变成事件流：检测和跟踪的结果驱动越线计数、区域停留和速度分析。",ja:"1 台のカメラをイベントストリームに。検出・追跡の結果から、ライン通過・エリア滞在・速度を分析します。"},
+  v:{en:"Unit-tested analytics core (line-crossing, zones, dwell, speed); end-to-end run on real footage in progress.",zh:"分析核心（越线、区域、停留、速度）有单元测试；真实视频的端到端运行还在进行中。",ja:"分析コア（ライン通過・エリア・滞在・速度）は単体テスト済み。実映像でのエンドツーエンド検証は進行中。"},
+  stack:["YOLO","Multi-object tracking","Python"], code:"https://github.com/HSanny/motion-analyser"},
+];
+function renderProjects(){
+  $("#projList").innerHTML=PROJECTS.map(p=>`<article class="proj"><div class="meta">${p.soon?`<span class="chip amber">${esc(t("proj.soon"))}</span>`:""}${p.stack.map(x=>`<span class="chip">${esc(x)}</span>`).join("")}</div><h3>${esc(p.h[LANG])}</h3><p class="note">${esc(p.p[LANG])}</p><p class="checked"><b>${esc(t("proj.verified"))}:</b> ${esc(p.v[LANG])}</p><div class="links">${p.code?`<a class="btn" href="${p.code}" target="_blank" rel="noopener">${esc(t("proj.code"))} ↗</a>`:""}${p.demo?`<a class="btn" href="${p.demo}" target="_blank" rel="noopener">${esc(t("proj.demo"))} ↗</a>`:""}</div></article>`).join("");
+}
+
+let LANG="en";
+try{ const s=localStorage.getItem("lang"); if(I18N[s]) LANG=s; else { const n=(navigator.language||"").toLowerCase(); if(n.startsWith("zh")) LANG="zh"; else if(n.startsWith("ja")) LANG="ja"; } }catch(e){}
+const t=(k,vars)=>{ let s=(I18N[LANG]&&I18N[LANG][k])??I18N.en[k]??k; if(vars) for(const v in vars) s=s.replaceAll("{"+v+"}",vars[v]); return s; };
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function applyLang(){
+  document.documentElement.lang=LANG==="zh"?"zh-Hans":LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>el.innerHTML=t(el.dataset.i18nHtml));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===LANG)));
+  renderServices(); renderProjects(); renderCases(); renderTimeline(); renderContact(); renderFaultToggles(); renderCond(); runDetector(); readGauge();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{ LANG=b.dataset.lang; try{localStorage.setItem("lang",LANG);}catch(e){} applyLang(); }));
+
+function renderServices(){
+  $("#services").hidden=!CONFIG.showServices;
+  $("#svcList").innerHTML=SERVICES.map(s=>`<article class="svc"><div class="meta"><span class="chip">${esc(s.chip[LANG])}</span><span class="chip amber">${esc(t("svc.weeks"))}</span><span class="chip amber">${esc(t("svc.fixed"))}</span></div><h3>${esc(s.h[LANG])}</h3><p class="note" style="font-size:.95rem">${esc(s.p[LANG])}</p><div><div class="tag" style="margin-bottom:4px">${esc(t("svc.youGet"))}</div><ul>${s.get[LANG].map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div class="from"><span class="tag">${esc(t("svc.need"))}</span><br>${esc(s.need[LANG])}</div></article>`).join("");
+}
+function renderCases(){
+  $("#caseList").innerHTML=CASES.map(c=>`<article class="case"><div class="sector">${esc(c.sector[LANG])}</div><div><h3>${esc(c.h[LANG])}</h3><p>${esc(c.p[LANG])}</p>${c.v?`<p class="checked"><b>${esc(t("case.checked"))}:</b> ${esc(c.v[LANG])}</p>`:""}<div class="stack">${c.stack.map(x=>`<span>${esc(x)}</span>`).join("")}</div></div><div class="kpi">${c.kpi.map(k=>`<div><span class="v mono">${esc(k[0])}</span><span class="k">${esc(k[1][LANG])}</span></div>`).join("")}</div></article>`).join("");
+}
+function renderTimeline(){
+  $("#tl").innerHTML=[1,2,3,4].map(i=>`<div class="row"><div class="when">${esc(t("tl."+i+"w"))}</div><div class="what"><b>${esc(t("tl."+i))}</b><span>${esc(t("tl."+i+"s"))}</span></div></div>`).join("");
+  const cv=$("#cvBtn"); cv.hidden=!CONFIG.cvUrl; if(CONFIG.cvUrl) cv.href=CONFIG.cvUrl;
+}
+function renderContact(){
+  const rows=[];
+  rows.push(CONFIG.email?{k:t("c.email"),v:CONFIG.email,copy:true}:{k:t("c.email"),v:t("c.missing"),copy:false});
+  if(CONFIG.linkedin) rows.push({k:t("c.linkedin"),v:CONFIG.linkedin,link:true});
+  if(CONFIG.github) rows.push({k:t("c.github"),v:CONFIG.github,link:true});
+  if(CONFIG.booking) rows.push({k:t("c.booking"),v:CONFIG.booking,link:true});
+  $("#contactCards").innerHTML=rows.map((r,i)=>`<div class="cline"><div style="min-width:0"><div class="k">${esc(r.k)}</div><div class="v" id="cv${i}">${esc(r.v)}</div></div>${r.copy?`<button class="copy" type="button" data-copy="cv${i}">${esc(t("c.copy"))}</button>`:r.link?`<a class="copy" href="${esc(r.v)}" target="_blank" rel="noopener">${esc(t("c.open"))}</a>`:""}</div>`).join("");
+  document.querySelectorAll("[data-copy]").forEach(b=>b.addEventListener("click",()=>copyText($("#"+b.dataset.copy),b)));
+}
+function copyText(el,btn){
+  const txt=el.textContent;
+  const done=()=>{ const o=btn.textContent; btn.textContent=t("c.copied"); setTimeout(()=>btn.textContent=o,1400); };
+  const fallback=()=>{ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); };
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done,fallback); else fallback();
+}
+$("#brief").addEventListener("submit",e=>{
+  e.preventDefault();
+  const sel=$("#f-type"); const type=sel.options[sel.selectedIndex].textContent;
+  const out=$("#briefOut"); out.hidden=false;
+  out.textContent=t("f.tpl",{type, data:$("#f-data").value.trim()||"—", goal:$("#f-goal").value.trim()||"—"});
+  if(!out.nextElementSibling||!out.nextElementSibling.classList.contains("copy")){ const b=document.createElement("button"); b.type="button"; b.className="copy"; b.textContent=t("f.copy"); b.addEventListener("click",()=>copyText(out,b)); out.after(b); }
+});
+$("#yr").textContent=new Date().getFullYear();
+
+/* ---------- shared helpers ---------- */
+function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function gauss(r){ let u=0,v=0; while(!u)u=r(); while(!v)v=r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function fitCanvas(c){ const r=c.getBoundingClientRect(); const d=Math.min(window.devicePixelRatio||1,2); const w=Math.max(10,Math.round(r.width*d)), h=Math.max(10,Math.round(r.height*d)); if(c.width!==w||c.height!==h){ c.width=w; c.height=h; } return {ctx:c.getContext("2d"),w,h,d}; }
+
+/* ---------- demo 1: sensor fault detector ---------- */
+const PER_DAY=96, DAYS=7, N=PER_DAY*DAYS, TRAIN=PER_DAY*3;
+const FAULTS=["flat","spike","step","drop","drift"];
+let faultOn={flat:true,spike:true,step:true,drop:true,drift:false}, seed=7, series=null, injected=[], events=[], lastMs=0;
+function renderFaultToggles(){
+  $("#d1faults").innerHTML=FAULTS.map(f=>`<button type="button" class="toggle" data-f="${f}" aria-pressed="${faultOn[f]}">${esc(t("f."+f))}</button>`).join("");
+  document.querySelectorAll("#d1faults .toggle").forEach(b=>b.addEventListener("click",()=>{ faultOn[b.dataset.f]=!faultOn[b.dataset.f]; b.setAttribute("aria-pressed",String(faultOn[b.dataset.f])); build(); runDetector(); }));
+}
+function base(i){ const ph=(i%PER_DAY)/PER_DAY; return 2.4+0.55*Math.sin(2*Math.PI*(ph-0.3))+0.14*Math.sin(4*Math.PI*ph+0.6); }
+function build(){
+  const r=rng(seed); const x=new Array(N); for(let i=0;i<N;i++) x[i]=base(i)+0.025*gauss(r);
+  injected=[];
+  // fixed, non-overlapping slots after training window, jittered by seed
+  const slots={flat:[TRAIN+40,24],spike:[TRAIN+150,1],step:[TRAIN+215,64],drop:[TRAIN+300,12],drift:[TRAIN+330,96]};
+  for(const f of FAULTS){ if(!faultOn[f]) continue; let [s,len]=slots[f]; s+=Math.floor(r()*14);
+    if(f==="flat"){ const v=x[s]; for(let i=s;i<s+len;i++) x[i]=v; }
+    if(f==="spike"){ x[s]+= (r()<.5?-1:1)*(0.9+r()*0.4); }
+    if(f==="step"){ const d=(r()<.5?-1:1)*(0.32+r()*0.15); for(let i=s;i<s+len;i++) x[i]+=d; }
+    if(f==="drop"){ for(let i=s;i<s+len;i++) x[i]=NaN; }
+    if(f==="drift"){ const d=(r()<.5?-1:1)*0.55; for(let i=s;i<s+len;i++) x[i]+=d*(i-s)/len; }
+    injected.push({type:f,s,e:s+len-1});
+  }
+  series=x;
+}
+function median(a){ const b=a.slice().sort((p,q)=>p-q); const m=b.length>>1; return b.length%2?b[m]:(b[m-1]+b[m])/2; }
+function runDetector(){
+  if(!series) build();
+  const t0=performance.now(); const x=series;
+  // baseline per 15-min slot from training days (median / MAD)
+  const exp=new Array(PER_DAY), sc=new Array(PER_DAY);
+  for(let s=0;s<PER_DAY;s++){ const v=[]; for(let d=0;d<3;d++){ for(let k=-1;k<=1;k++){ const i=d*PER_DAY+((s+k+PER_DAY)%PER_DAY); v.push(x[i]); } } const m=median(v); exp[s]=m; sc[s]=1.4826*median(v.map(q=>Math.abs(q-m)))+0.01; }
+  const E=i=>exp[i%PER_DAY], S=i=>sc[i%PER_DAY];
+  const z=x.map((v,i)=>isNaN(v)?NaN:(v-E(i))/S(i));
+  const ev=[]; const used=new Uint8Array(N);
+  const add=(type,s,e,info)=>{ for(let i=s;i<=e;i++) used[i]=1; ev.push({type,s,e,...info}); };
+  // dropout
+  for(let i=TRAIN;i<N;i++){ if(isNaN(x[i])){ let j=i; while(j+1<N&&isNaN(x[j+1])) j++; if(j-i+1>=2) add("drop",i,j,{n:j-i+1}); i=j; } }
+  // flatline: >=8 consecutive identical readings
+  for(let i=TRAIN;i<N;i++){ if(used[i]||isNaN(x[i])) continue; let j=i; while(j+1<N&&!isNaN(x[j+1])&&Math.abs(x[j+1]-x[i])<1e-9) j++; if(j-i+1>=8){ add("flat",i,j,{n:j-i+1,v:x[i]}); i=j; } }
+  // spike: isolated |z|>7
+  for(let i=TRAIN+1;i<N-1;i++){ if(used[i]||isNaN(z[i])) continue; if(Math.abs(z[i])>7&&Math.abs(z[i-1]||0)<4&&Math.abs(z[i+1]||0)<4) add("spike",i,i,{d:x[i]-E(i)}); }
+  // sustained deviation via EWMA on z (ignoring used points); classify step vs drift by onset sharpness
+  let ew=0, run=0, start=-1; const lam=0.15;
+  for(let i=TRAIN;i<N;i++){
+    if(used[i]||isNaN(z[i])){ continue; }
+    ew=lam*z[i]+(1-lam)*ew;
+    if(Math.abs(ew)>3.2){ if(run===0) start=i; run++; } else { if(run>=10) closeDev(start,i-1); run=0; }
+  }
+  if(run>=10) closeDev(start,N-1);
+  function closeDev(s,e){
+    // walk back to onset where |z| first exceeded 2
+    let on=s; while(on>TRAIN&&!used[on-1]&&Math.abs(z[on-1])>2) on--;
+    const pre=[],post=[]; for(let k=on-8;k<on;k++) if(k>=0&&!isNaN(z[k])) pre.push(z[k]); for(let k=on;k<on+8&&k<=e;k++) if(!isNaN(z[k])) post.push(z[k]);
+    const jump=Math.abs(median(post)-(pre.length?median(pre):0));
+    const d=x[e]-E(e);
+    add(jump>4.5?"step":"drift",on,e,{d});
+  }
+  ev.sort((a,b)=>a.s-b.s); events=ev; lastMs=performance.now()-t0;
+  drawD1(exp,sc); logD1();
+}
+function fmtTime(i){ const d=Math.floor(i/PER_DAY)+1, m=(i%PER_DAY)*15; const hh=String(Math.floor(m/60)).padStart(2,"0"), mm=String(m%60).padStart(2,"0"); return (LANG==="en"?"Day "+d:LANG==="zh"?"第 "+d+" 天":d+" 日目")+" "+hh+":"+mm; }
+function logD1(){
+  const caught=injected.filter(f=>events.some(e=>e.e>=f.s-2&&e.s<=f.e+2)).length;
+  const falses=events.filter(e=>!injected.some(f=>e.e>=f.s-2&&e.s<=f.e+2)).length;
+  $("#d1score").innerHTML=injected.length?`<span>${esc(t("d1.caught"))} <b>${caught}/${injected.length}</b></span><span>${esc(t("d1.false"))} <b>${falses}</b></span><span>${esc(t("d1.time"))} <b>${lastMs.toFixed(1)} ms</b></span>`:`<span>${esc(t("d1.none"))}</span>`;
+  const sgn=v=>(v>0?"+":"−")+Math.abs(v).toFixed(2)+" m";
+  $("#d1log").innerHTML=events.map(e=>{ const body=e.type==="flat"?t("a.flat",{v:e.v.toFixed(3),n:e.n}):e.type==="drop"?t("a.drop",{n:e.n}):e.type==="spike"?t("a.spike",{d:sgn(e.d)}):e.type==="step"?t("a.step",{d:sgn(e.d)}):t("a.drift",{d:sgn(e.d)});
+    return `<div class="msg"><div class="h">🔔 ${esc(t("d1.alert"))} · ${esc(t("f."+e.type))}</div><div>${esc(body)}</div><div class="s">${esc(fmtTime(e.s))} → ${esc(fmtTime(e.e))}</div></div>`; }).join("")||`<div class="note">—</div>`;
+}
+function drawD1(exp,sc){
+  const c=$("#d1c"); const {ctx,w,h,d}=fitCanvas(c); const L=44*d,R=10*d,T=12*d,B=26*d;
+  ctx.clearRect(0,0,w,h);
+  const vals=series.filter(v=>!isNaN(v)); const lo=Math.min(...vals)-0.1, hi=Math.max(...vals)+0.1;
+  const X=i=>L+(w-L-R)*i/(N-1), Y=v=>T+(h-T-B)*(1-(v-lo)/(hi-lo));
+  ctx.font=`${11*d}px IBM Plex Mono, monospace`; ctx.fillStyle=css("--muted"); ctx.strokeStyle=css("--grid"); ctx.lineWidth=1*d;
+  for(let k=0;k<=4;k++){ const v=lo+(hi-lo)*k/4; const y=Y(v); ctx.beginPath(); ctx.moveTo(L,y); ctx.lineTo(w-R,y); ctx.stroke(); ctx.fillText(v.toFixed(1),4*d,y+4*d); }
+  for(let dd=0;dd<=DAYS;dd++){ const x=X(Math.min(N-1,dd*PER_DAY)); ctx.beginPath(); ctx.moveTo(x,T); ctx.lineTo(x,h-B); ctx.stroke(); if(dd<DAYS) ctx.fillText((LANG==="en"?"D":"")+(dd+1)+(LANG==="zh"?"天":LANG==="ja"?"日":""),x+4*d,h-8*d); }
+  // training shade
+  ctx.fillStyle=css("--water-soft"); ctx.fillRect(L,T,X(TRAIN)-L,h-T-B);
+  // expected band
+  ctx.fillStyle=css("--grid"); ctx.beginPath(); for(let i=0;i<N;i++){ const s=i%PER_DAY; ctx.lineTo(X(i),Y(exp[s]+3*sc[s])); } for(let i=N-1;i>=0;i--){ const s=i%PER_DAY; ctx.lineTo(X(i),Y(exp[s]-3*sc[s])); } ctx.closePath(); ctx.globalAlpha=.9; ctx.fill(); ctx.globalAlpha=1;
+  // events
+  for(const e of events){ ctx.fillStyle=css("--signal-soft"); ctx.fillRect(X(e.s)-3*d,T,Math.max(6*d,X(e.e)-X(e.s)+6*d),h-T-B); }
+  // line
+  ctx.strokeStyle=css("--water"); ctx.lineWidth=1.4*d; ctx.beginPath(); let pen=false; for(let i=0;i<N;i++){ const v=series[i]; if(isNaN(v)){ pen=false; continue; } const x=X(i),y=Y(v); if(!pen){ctx.moveTo(x,y);pen=true;} else ctx.lineTo(x,y); } ctx.stroke();
+  // event markers
+  ctx.fillStyle=css("--signal"); ctx.strokeStyle=css("--signal"); ctx.lineWidth=2*d;
+  for(const e of events){ ctx.beginPath(); ctx.moveTo(X(e.s),T); ctx.lineTo(X(e.e)+0.01,T); ctx.stroke(); ctx.fillText(t("f."+e.type),Math.min(X(e.s),w-R-70*d),T+12*d); }
+}
+$("#d1new").addEventListener("click",()=>{ seed=Math.floor(Math.random()*1e9); build(); runDetector(); });
+
+/* ---------- demo 2: flood gauge reader ---------- */
+let cond={rain:false,glare:false,murky:false,dusk:false}, gSeed=3;
+function renderCond(){
+  $("#d2cond").innerHTML=Object.keys(cond).map(k=>`<button type="button" class="toggle" data-c="${k}" aria-pressed="${cond[k]}">${esc(t("c."+k))}</button>`).join("");
+  document.querySelectorAll("#d2cond .toggle").forEach(b=>b.addEventListener("click",()=>{ cond[b.dataset.c]=!cond[b.dataset.c]; b.setAttribute("aria-pressed",String(cond[b.dataset.c])); readGauge(); }));
+}
+const GW=220, GH=440, TOP=30, BOT=410, GX0=86, GX1=134;   // gauge geometry in scene pixels
+function cmToY(cm){ return BOT-(BOT-TOP)*cm/800; }
+function renderScene(level){
+  const off=document.createElement("canvas"); off.width=GW; off.height=GH; const g=off.getContext("2d"); const r=rng(gSeed+Math.round(level));
+  // wall
+  const wall=g.createLinearGradient(0,0,GW,0); wall.addColorStop(0,"#8d8f88"); wall.addColorStop(1,"#a3a59d"); g.fillStyle=wall; g.fillRect(0,0,GW,GH);
+  for(let i=0;i<400;i++){ g.fillStyle=`rgba(60,60,55,${r()*0.15})`; g.fillRect(r()*GW,r()*GH,2,2); }
+  // gauge plate
+  g.fillStyle="#f4f3ee"; g.fillRect(GX0,TOP-12,GX1-GX0,BOT-TOP+24);
+  for(let cm=0;cm<=800;cm+=10){ const y=cmToY(cm); const big=cm%100===0, mid=cm%50===0; g.fillStyle="#1a1a1a"; g.fillRect(GX0,y-1,big?30:mid?22:12,2); }
+  for(let m=0;m<8;m++){ const y0=cmToY(m*100+100), y1=cmToY(m*100+80); g.fillStyle="#e2b417"; g.fillRect(GX1-14,y0,14,y1-y0); }
+  g.fillStyle="#1a1a1a"; g.font="bold 11px IBM Plex Mono, monospace"; for(let m=1;m<=8;m++){ g.fillText(String(m*100),GX0+31,cmToY(m*100)+4); }
+  // water
+  const wy=cmToY(level);
+  const wc=cond.murky?[128,112,82]:[52,92,98];
+  for(let y=Math.floor(wy-3);y<GH;y++){ const wave=Math.sin(y*0.7)*1.5; for(let x=0;x<GW;x+=2){ const surf=wy+Math.sin(x*0.09+level)*2.2; if(y<surf) continue; const n=(r()-.5)*18; g.fillStyle=`rgb(${wc[0]+n+wave},${wc[1]+n},${wc[2]+n})`; g.fillRect(x,y,2,1); } }
+  // reflection of gauge just below surface
+  g.fillStyle="rgba(240,240,230,0.18)"; g.fillRect(GX0,wy+2,GX1-GX0,12);
+  if(cond.glare){ const gr=g.createRadialGradient(GX0+30,wy+16,2,GX0+30,wy+16,46); gr.addColorStop(0,"rgba(255,255,250,0.75)"); gr.addColorStop(1,"rgba(255,255,250,0)"); g.fillStyle=gr; g.fillRect(0,wy-30,GW,90); }
+  if(cond.rain){ g.strokeStyle="rgba(230,235,240,0.45)"; g.lineWidth=1; for(let i=0;i<140;i++){ const x=r()*GW, y=r()*GH; g.beginPath(); g.moveTo(x,y); g.lineTo(x-3,y+14); g.stroke(); } }
+  if(cond.dusk){ g.fillStyle="rgba(20,25,45,0.45)"; g.fillRect(0,0,GW,GH); }
+  return off;
+}
+function readGauge(){
+  const level=+$("#d2lvl").value; const scene=renderScene(level);
+  const t0=performance.now();
+  const g=scene.getContext("2d"); const img=g.getImageData(GX0+4,0,GX1-GX0-20,GH).data; const W=GX1-GX0-20;
+  // reference: gauge plate brightness measured on the top calibration band (always dry)
+  const rowStats=y=>{ let sb=0,sr=0,sg=0,sbl=0,cnt=0; for(let x=0;x<W;x++){ const k=(y*W+x)*4; const R=img[k],G=img[k+1],Bc=img[k+2]; const br=(R+G+Bc)/3; if(br<70) continue; sb+=br; sr+=R; sg+=G; sbl+=Bc; cnt++; } return cnt?{br:sb/cnt,R:sr/cnt,G:sg/cnt,B:sbl/cnt,cnt}:{br:0,R:0,G:0,B:0,cnt:0}; };
+  let ref=0,rn=0; for(let y=TOP-8;y<TOP+30;y++){ const s=rowStats(y); if(s.cnt){ ref+=s.br; rn++; } } ref/=rn||1;
+  // a row is "plate" when it is bright relative to the reference and low in saturation
+  const isPlate=y=>{ const s=rowStats(y); if(!s.cnt) return false; const mx=Math.max(s.R,s.G,s.B), mn=Math.min(s.R,s.G,s.B); const sat=(mx-mn)/(mx||1); return s.br>ref*0.78 && sat<0.22 && s.cnt>W*0.35; };
+  // scan downward; the water line is the first row after which 10 of the next 12 rows are not plate
+  let plateY=BOT;
+  for(let y=TOP;y<BOT;y++){ if(isPlate(y)) continue; let not=0; for(let k=0;k<12;k++) if(!isPlate(y+k)) not++; if(not>=10){ plateY=y; break; } }
+  // second cue: the water surface also crosses the concrete wall beside the gauge; water is far more saturated than wet concrete
+  const WX0=GX1+34, WW=GW-WX0-4; const wimg=g.getImageData(WX0,0,WW,GH).data;
+  const wallSat=y=>{ let s=0; for(let x=0;x<WW;x++){ const k=(y*WW+x)*4; const R=wimg[k],G=wimg[k+1],Bc=wimg[k+2]; const mx=Math.max(R,G,Bc),mn=Math.min(R,G,Bc); s+=(mx-mn)/(mx||1); } return s/WW; };
+  let dry=0; for(let y=4;y<TOP+20;y++) dry+=wallSat(y); dry/=(TOP+16);   // saturation of dry wall in this lighting
+  let wallY=-1; for(let y=TOP;y<BOT+20&&y<GH-8;y++){ let wet=0; for(let k=0;k<8;k++) if(wallSat(y+k)>dry+0.08) wet++; if(wet>=7){ wallY=y; break; } }
+  // trust the wall cue when the plate is washed out by glare (plate line far below the wall line)
+  const found=(wallY>0&&Math.abs(plateY-wallY)>10)?wallY:plateY;
+  const est=Math.max(0,Math.min(800,(BOT-found)/(BOT-TOP)*800));
+  const ms=performance.now()-t0;
+  // draw scene + detection
+  const c=$("#d2c"); const {ctx,w,h}=fitCanvas(c); ctx.imageSmoothingEnabled=true; ctx.drawImage(scene,0,0,w,h);
+  const sy=found*h/GH; ctx.strokeStyle=css("--signal")||"#c4700f"; ctx.lineWidth=Math.max(2,w/110); ctx.setLineDash([6,4]); ctx.beginPath(); ctx.moveTo(0,sy); ctx.lineTo(w,sy); ctx.stroke(); ctx.setLineDash([]);
+  $("#d2est").textContent=Math.round(est)+" cm";
+  $("#d2err").textContent=t("d2.err",{e:(est-level>=0?"+":"−")+Math.abs(est-level).toFixed(0), t:ms.toFixed(1)});
+}
+$("#d2lvl").addEventListener("input",readGauge);
+
+/* ---------- hero recorder ---------- */
+(function(){
+  const c=$("#rec"); const r=rng(11); let i=0; const buf=[]; let flatFrom=-1, flatVal=0;
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function next(){
+    let v=base(i)+0.025*gauss(r);
+    const ph=i%220; if(ph>=150&&ph<190){ if(ph===150){ flatVal=buf.length?buf[buf.length-1]:v; } v=flatVal; }
+    buf.push(v); if(buf.length>160) buf.shift(); i++;
+  }
+  for(let k=0;k<160;k++) next();
+  function draw(){
+    const {ctx,w,h,d}=fitCanvas(c); ctx.clearRect(0,0,w,h);
+    const lo=1.6, hi=3.2, X=k=>w*k/159, Y=v=>h*(1-(v-lo)/(hi-lo));
+    ctx.strokeStyle=css("--grid"); ctx.lineWidth=1*d; for(let k=1;k<4;k++){ const y=h*k/4; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+    // detect flat run at the tail
+    let run=1; for(let k=buf.length-1;k>0&&Math.abs(buf[k]-buf[k-1])<1e-9;k--) run++;
+    let flatStart=-1; for(let k=1,cur=1;k<buf.length;k++){ if(Math.abs(buf[k]-buf[k-1])<1e-9){ cur++; if(cur===8) flatStart=k-7; } else cur=1; }
+    if(run>=8){ ctx.fillStyle=css("--signal-soft"); ctx.fillRect(X(buf.length-run),0,w-X(buf.length-run),h); }
+    ctx.strokeStyle=css("--water"); ctx.lineWidth=1.8*d; ctx.beginPath(); buf.forEach((v,k)=>{ k?ctx.lineTo(X(k),Y(v)):ctx.moveTo(X(k),Y(v)); }); ctx.stroke();
+    if(run>=8){ ctx.strokeStyle=css("--signal"); ctx.lineWidth=2.4*d; ctx.beginPath(); ctx.moveTo(X(buf.length-run),Y(buf[buf.length-1])); ctx.lineTo(X(buf.length-1),Y(buf[buf.length-1])); ctx.stroke(); }
+    $("#recAlert").textContent=run>=8?t("rec.flat",{n:run,v:buf[buf.length-1].toFixed(3)}):t("rec.ok");
+    const m=((i%PER_DAY)*15); $("#recClock").textContent=String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+  }
+  draw();
+  if(!reduce) setInterval(()=>{ if(document.hidden) return; next(); draw(); },260);
+  window.__recDraw=draw;
+})();
+
+let rz; window.addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ runDetector(); readGauge(); window.__recDraw&&window.__recDraw(); },120); });
+if(window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>{ runDetector(); readGauge(); });
+build(); applyLang();
+</script>
+</body>
+</html>
