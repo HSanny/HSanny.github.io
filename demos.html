@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live demos · Sanny Hong</title>
+<meta name="description" content="Two small demos that run in your browser: a sensor fault detector and a flood-gauge reader, both on CPU with synthetic data.">
+<script src="assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="">
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><i></i>sanny.hong</a>
+    <nav>
+      <a href="index.html#work" data-t="nav.work">Work</a>
+      <a href="work/llm-agent.html" data-t="nav.case">Case study</a>
+      <a href="index.html#contact" data-t="nav.contact">Contact</a>
+    </nav>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+    </div>
+    <button class="theme" type="button" aria-label="Switch theme"></button>
+  </div>
+</header>
+
+<main>
+  <section class="wrap case-hero project" id="alerts">
+    <div class="meta" data-t="demo.tag"></div>
+    <h1 data-t="d1.h">Fleet-wide sensor anomaly alerting</h1>
+    <p class="lede" data-t="d1.sub"></p>
+    <div class="demo" aria-label="Sensor fault detector demo">
+      <div class="dtop">
+        <div class="controls" id="d1faults" role="group" aria-label="Faults to inject"></div>
+        <button type="button" class="btn" id="d1new" data-t="d1.new">New data</button>
+      </div>
+      <div class="demo-grid">
+        <div>
+          <div class="chartbox"><canvas id="d1c" width="900" height="280" aria-label="Sensor chart with detected faults"></canvas></div>
+          <div class="score" id="d1score" aria-live="polite"></div>
+        </div>
+        <div class="log" id="d1log" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap case-hero project" id="vision">
+    <div class="meta" data-t="demo.tag"></div>
+    <h1 data-t="d2.h">Flood-gauge reading on CPU only</h1>
+    <p class="lede" data-t="d2.sub"></p>
+    <div class="demo" aria-label="Flood gauge reader demo">
+      <div class="gauge-wrap">
+        <canvas id="d2c" width="220" height="440" aria-label="Rendered flood gauge with detected water line"></canvas>
+        <div class="readout">
+          <div><div class="meta" data-t="d2.est">Reading</div><div class="big" id="d2est">—</div><div class="note mono" id="d2err"></div></div>
+          <label><span data-t="d2.level">True water level (cm)</span><input type="range" id="d2lvl" min="40" max="760" value="315" step="1"></label>
+          <div class="controls" id="d2cond" role="group" aria-label="Conditions"></div>
+          <p class="note" data-t="d2.real"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span data-t="foot.l">© 2026 Sanny Hong</span><a href="index.html" data-t="d.back">← Back to all work</a></div></footer>
+
+<script src="assets/i18n.js"></script>
+<script>
+/* Two in-browser demos (synthetic data, CPU only). Same detector and gauge code as before, restyled for this site. */
+const D = {
+en:{
+ "demo.tag":"Live demo · runs in your browser · synthetic data","demo.h2":"Break the data and watch it get caught.",
+ "demo.lede":"Both demos run entirely in this page, on your device's CPU, with synthetic data. They are small versions of techniques from my production systems.",
+ "d1.h":"Fleet-wide sensor anomaly alerting","d1.sub":"Seven days of a reservoir level at 15-minute intervals. The first three days teach the normal daily cycle; faults are injected after that.","d1.new":"New data",
+ "f.flat":"Flatline","f.spike":"Spike","f.step":"Step change","f.drop":"Dropout","f.drift":"Slow drift",
+ "d1.caught":"Faults caught","d1.false":"False alarms","d1.time":"Run time","d1.none":"No faults injected. Pick one above.",
+ "d1.alert":"ALERT","d1.day":"Day",
+ "a.flat":"Value stuck at {v} m for {n} readings. Likely frozen transmitter or comms loss.",
+ "a.spike":"Single reading {d} from the expected value. Likely noise or a one-off glitch.",
+ "a.step":"Level shifted {d} and stayed there. Check recalibration, valve change or sensor swap.",
+ "a.drop":"{n} readings missing. Check data link or logger.",
+ "a.drift":"Gradual departure from the daily pattern, now {d}. Check fouling or calibration drift.",
+ "d2.h":"Flood-gauge reading on CPU only","d2.sub":"A staff gauge from 0 to 800 cm with yellow reference blocks every metre. The reader scans the pixels and finds the water line, with no GPU and no model download.",
+ "d2.est":"Reading","d2.level":"True water level (cm)","d2.err":"error {e} cm · {t} ms on CPU",
+ "c.rain":"Rain","c.glare":"Glare","c.murky":"Murky water","c.dusk":"Dusk",
+ "d2.real":"The production version of this used Florence-2 and SAM 2 on 777 field images across 11 conditions (night, rain, glare, debris, murky water and more).",
+ "d.back":"← Back to all work"
+},
+zh:{
+ "demo.tag":"在线演示 · 在你的浏览器里运行 · 模拟数据","demo.h2":"动手把数据弄坏，看它怎么被抓出来。",
+ "demo.lede":"两个演示都完全在本页面运行，用的是你设备的 CPU 和模拟数据。它们是我生产系统里所用方法的简化版。",
+ "d1.h":"全网传感器异常告警","d1.sub":"一个水库水位 7 天的数据，每 15 分钟一个点。前 3 天用来学习正常的日变化规律，之后注入故障。","d1.new":"换一组数据",
+ "f.flat":"数值冻结","f.spike":"尖峰","f.step":"阶跃","f.drop":"数据缺失","f.drift":"缓慢漂移",
+ "d1.caught":"抓到的故障","d1.false":"误报","d1.time":"运行耗时","d1.none":"还没有注入故障，在上面选一个。",
+ "d1.alert":"告警","d1.day":"第",
+ "a.flat":"数值停在 {v} 米，持续 {n} 个读数。可能是变送器卡死或通讯中断。",
+ "a.spike":"单个读数偏离预期 {d}。可能是噪声或偶发干扰。",
+ "a.step":"水位突然偏移 {d} 并保持不变。请检查是否重新校准、阀门动作或更换了传感器。",
+ "a.drop":"缺失 {n} 个读数。请检查数据链路或采集器。",
+ "a.drift":"逐渐偏离日常规律，目前偏差 {d}。请检查结垢或校准漂移。",
+ "d2.h":"纯 CPU 水尺读数","d2.sub":"一根 0–800 厘米的水尺，每米有黄色参考色块。程序逐像素扫描并找到水面线，不用 GPU，也不用下载模型。",
+ "d2.est":"读数","d2.level":"实际水位（厘米）","d2.err":"误差 {e} 厘米 · CPU 耗时 {t} 毫秒",
+ "c.rain":"下雨","c.glare":"反光","c.murky":"浑浊","c.dusk":"傍晚",
+ "d2.real":"正式版本使用 Florence-2 和 SAM 2，在 777 张现场图片、11 种条件（夜间、雨天、反光、杂物、浑水等）上验证。",
+ "d.back":"← 返回全部项目"
+},
+ja:{
+ "demo.tag":"ライブデモ · ブラウザで動作 · 合成データ","demo.h2":"データを壊して、検知される様子を見てください。",
+ "demo.lede":"どちらのデモも、このページ内でお使いの端末の CPU と合成データだけで動きます。本番システムで使っている手法の簡易版です。",
+ "d1.h":"センサー全体の異常アラート","d1.sub":"貯水池の水位 7 日分（15 分間隔）。最初の 3 日で通常の日内パターンを学習し、その後に故障を注入します。","d1.new":"データを再生成",
+ "f.flat":"値の固着","f.spike":"スパイク","f.step":"段差","f.drop":"欠測","f.drift":"緩やかなドリフト",
+ "d1.caught":"検知した故障","d1.false":"誤報","d1.time":"処理時間","d1.none":"故障が注入されていません。上から選んでください。",
+ "d1.alert":"アラート","d1.day":"",
+ "a.flat":"値が {v} m のまま {n} 回連続。伝送器の固着か通信断の可能性。",
+ "a.spike":"1 点だけ想定値から {d} 外れています。ノイズまたは一時的な異常の可能性。",
+ "a.step":"水位が {d} ずれたまま戻りません。再校正、バルブ操作、センサー交換を確認してください。",
+ "a.drop":"{n} 件の欠測。通信回線またはロガーを確認してください。",
+ "a.drift":"日内パターンから徐々に外れ、現在 {d}。汚れや校正ずれを確認してください。",
+ "d2.h":"CPU のみの量水標読み取り","d2.sub":"0〜800 cm の量水標（1 m ごとに黄色の目印）。画素を走査して水面を検出します。GPU もモデルのダウンロードも不要です。",
+ "d2.est":"読み取り値","d2.level":"実際の水位（cm）","d2.err":"誤差 {e} cm · CPU で {t} ms",
+ "c.rain":"雨","c.glare":"反射","c.murky":"濁り","c.dusk":"夕方",
+ "d2.real":"本番版では Florence-2 と SAM 2 を使い、現場画像 777 枚・11 条件（夜間、雨、反射、漂流物、濁水など）で検証しました。",
+ "d.back":"← すべての実績へ戻る"
+}
+};
+let LANG = "en";
+try { const s = localStorage.getItem("lang"); if (D[s]) LANG = s; else { const n = (navigator.language || "").toLowerCase(); if (n.startsWith("zh")) LANG = "zh"; else if (n.startsWith("ja")) LANG = "ja"; } } catch (e) {}
+const asked = new URL(location.href).searchParams.get("lang"); if (D[asked]) LANG = asked;
+const t = (k, vars) => { let s = D[LANG][k] ?? window.I18N[LANG][k] ?? D.en[k] ?? window.I18N.en[k] ?? k; if (vars) for (const v in vars) s = s.replaceAll("{" + v + "}", vars[v]); return s; };
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+/* ---------- shared helpers ---------- */
+function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function gauss(r){ let u=0,v=0; while(!u)u=r(); while(!v)v=r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function fitCanvas(c){ const r=c.getBoundingClientRect(); const d=Math.min(window.devicePixelRatio||1,2); const w=Math.max(10,Math.round(r.width*d)), h=Math.max(10,Math.round(r.height*d)); if(c.width!==w||c.height!==h){ c.width=w; c.height=h; } return {ctx:c.getContext("2d"),w,h,d}; }
+
+/* ---------- demo 1: sensor fault detector ---------- */
+const PER_DAY=96, DAYS=7, N=PER_DAY*DAYS, TRAIN=PER_DAY*3;
+const FAULTS=["flat","spike","step","drop","drift"];
+let faultOn={flat:true,spike:true,step:true,drop:true,drift:false}, seed=7, series=null, injected=[], events=[], lastMs=0;
+function renderFaultToggles(){
+  $("#d1faults").innerHTML=FAULTS.map(f=>`<button type="button" class="toggle" data-f="${f}" aria-pressed="${faultOn[f]}">${esc(t("f."+f))}</button>`).join("");
+  document.querySelectorAll("#d1faults .toggle").forEach(b=>b.addEventListener("click",()=>{ faultOn[b.dataset.f]=!faultOn[b.dataset.f]; b.setAttribute("aria-pressed",String(faultOn[b.dataset.f])); build(); runDetector(); }));
+}
+function base(i){ const ph=(i%PER_DAY)/PER_DAY; return 2.4+0.55*Math.sin(2*Math.PI*(ph-0.3))+0.14*Math.sin(4*Math.PI*ph+0.6); }
+function build(){
+  const r=rng(seed); const x=new Array(N); for(let i=0;i<N;i++) x[i]=base(i)+0.025*gauss(r);
+  injected=[];
+  // fixed, non-overlapping slots after training window, jittered by seed
+  const slots={flat:[TRAIN+40,24],spike:[TRAIN+150,1],step:[TRAIN+215,64],drop:[TRAIN+300,12],drift:[TRAIN+330,96]};
+  for(const f of FAULTS){ if(!faultOn[f]) continue; let [s,len]=slots[f]; s+=Math.floor(r()*14);
+    if(f==="flat"){ const v=x[s]; for(let i=s;i<s+len;i++) x[i]=v; }
+    if(f==="spike"){ x[s]+= (r()<.5?-1:1)*(0.9+r()*0.4); }
+    if(f==="step"){ const d=(r()<.5?-1:1)*(0.32+r()*0.15); for(let i=s;i<s+len;i++) x[i]+=d; }
+    if(f==="drop"){ for(let i=s;i<s+len;i++) x[i]=NaN; }
+    if(f==="drift"){ const d=(r()<.5?-1:1)*0.55; for(let i=s;i<s+len;i++) x[i]+=d*(i-s)/len; }
+    injected.push({type:f,s,e:s+len-1});
+  }
+  series=x;
+}
+function median(a){ const b=a.slice().sort((p,q)=>p-q); const m=b.length>>1; return b.length%2?b[m]:(b[m-1]+b[m])/2; }
+function runDetector(){
+  if(!series) build();
+  const t0=performance.now(); const x=series;
+  // baseline per 15-min slot from training days (median / MAD)
+  const exp=new Array(PER_DAY), sc=new Array(PER_DAY);
+  for(let s=0;s<PER_DAY;s++){ const v=[]; for(let d=0;d<3;d++){ for(let k=-1;k<=1;k++){ const i=d*PER_DAY+((s+k+PER_DAY)%PER_DAY); v.push(x[i]); } } const m=median(v); exp[s]=m; sc[s]=1.4826*median(v.map(q=>Math.abs(q-m)))+0.01; }
+  const E=i=>exp[i%PER_DAY], S=i=>sc[i%PER_DAY];
+  const z=x.map((v,i)=>isNaN(v)?NaN:(v-E(i))/S(i));
+  const ev=[]; const used=new Uint8Array(N);
+  const add=(type,s,e,info)=>{ for(let i=s;i<=e;i++) used[i]=1; ev.push({type,s,e,...info}); };
+  // dropout
+  for(let i=TRAIN;i<N;i++){ if(isNaN(x[i])){ let j=i; while(j+1<N&&isNaN(x[j+1])) j++; if(j-i+1>=2) add("drop",i,j,{n:j-i+1}); i=j; } }
+  // flatline: >=8 consecutive identical readings
+  for(let i=TRAIN;i<N;i++){ if(used[i]||isNaN(x[i])) continue; let j=i; while(j+1<N&&!isNaN(x[j+1])&&Math.abs(x[j+1]-x[i])<1e-9) j++; if(j-i+1>=8){ add("flat",i,j,{n:j-i+1,v:x[i]}); i=j; } }
+  // spike: isolated |z|>7
+  for(let i=TRAIN+1;i<N-1;i++){ if(used[i]||isNaN(z[i])) continue; if(Math.abs(z[i])>7&&Math.abs(z[i-1]||0)<4&&Math.abs(z[i+1]||0)<4) add("spike",i,i,{d:x[i]-E(i)}); }
+  // sustained deviation via EWMA on z (ignoring used points); classify step vs drift by onset sharpness
+  let ew=0, run=0, start=-1; const lam=0.15;
+  for(let i=TRAIN;i<N;i++){
+    if(used[i]||isNaN(z[i])){ continue; }
+    ew=lam*z[i]+(1-lam)*ew;
+    if(Math.abs(ew)>3.2){ if(run===0) start=i; run++; } else { if(run>=10) closeDev(start,i-1); run=0; }
+  }
+  if(run>=10) closeDev(start,N-1);
+  function closeDev(s,e){
+    // walk back to onset where |z| first exceeded 2
+    let on=s; while(on>TRAIN&&!used[on-1]&&Math.abs(z[on-1])>2) on--;
+    const pre=[],post=[]; for(let k=on-8;k<on;k++) if(k>=0&&!isNaN(z[k])) pre.push(z[k]); for(let k=on;k<on+8&&k<=e;k++) if(!isNaN(z[k])) post.push(z[k]);
+    const jump=Math.abs(median(post)-(pre.length?median(pre):0));
+    const d=x[e]-E(e);
+    add(jump>4.5?"step":"drift",on,e,{d});
+  }
+  ev.sort((a,b)=>a.s-b.s); events=ev; lastMs=performance.now()-t0;
+  drawD1(exp,sc); logD1();
+}
+function fmtTime(i){ const d=Math.floor(i/PER_DAY)+1, m=(i%PER_DAY)*15; const hh=String(Math.floor(m/60)).padStart(2,"0"), mm=String(m%60).padStart(2,"0"); return (LANG==="en"?"Day "+d:LANG==="zh"?"第 "+d+" 天":d+" 日目")+" "+hh+":"+mm; }
+function logD1(){
+  const caught=injected.filter(f=>events.some(e=>e.e>=f.s-2&&e.s<=f.e+2)).length;
+  const falses=events.filter(e=>!injected.some(f=>e.e>=f.s-2&&e.s<=f.e+2)).length;
+  $("#d1score").innerHTML=injected.length?`<span>${esc(t("d1.caught"))} <b>${caught}/${injected.length}</b></span><span>${esc(t("d1.false"))} <b>${falses}</b></span><span>${esc(t("d1.time"))} <b>${lastMs.toFixed(1)} ms</b></span>`:`<span>${esc(t("d1.none"))}</span>`;
+  const sgn=v=>(v>0?"+":"−")+Math.abs(v).toFixed(2)+" m";
+  $("#d1log").innerHTML=events.map(e=>{ const body=e.type==="flat"?t("a.flat",{v:e.v.toFixed(3),n:e.n}):e.type==="drop"?t("a.drop",{n:e.n}):e.type==="spike"?t("a.spike",{d:sgn(e.d)}):e.type==="step"?t("a.step",{d:sgn(e.d)}):t("a.drift",{d:sgn(e.d)});
+    return `<div class="msg"><div class="h">🔔 ${esc(t("d1.alert"))} · ${esc(t("f."+e.type))}</div><div>${esc(body)}</div><div class="s">${esc(fmtTime(e.s))} → ${esc(fmtTime(e.e))}</div></div>`; }).join("")||`<div class="note">—</div>`;
+}
+function drawD1(exp,sc){
+  const c=$("#d1c"); const {ctx,w,h,d}=fitCanvas(c); const L=44*d,R=10*d,T=12*d,B=26*d;
+  ctx.clearRect(0,0,w,h);
+  const vals=series.filter(v=>!isNaN(v)); const lo=Math.min(...vals)-0.1, hi=Math.max(...vals)+0.1;
+  const X=i=>L+(w-L-R)*i/(N-1), Y=v=>T+(h-T-B)*(1-(v-lo)/(hi-lo));
+  ctx.font=`${11*d}px IBM Plex Mono, monospace`; ctx.fillStyle=css("--muted"); ctx.strokeStyle=css("--grid"); ctx.lineWidth=1*d;
+  for(let k=0;k<=4;k++){ const v=lo+(hi-lo)*k/4; const y=Y(v); ctx.beginPath(); ctx.moveTo(L,y); ctx.lineTo(w-R,y); ctx.stroke(); ctx.fillText(v.toFixed(1),4*d,y+4*d); }
+  for(let dd=0;dd<=DAYS;dd++){ const x=X(Math.min(N-1,dd*PER_DAY)); ctx.beginPath(); ctx.moveTo(x,T); ctx.lineTo(x,h-B); ctx.stroke(); if(dd<DAYS) ctx.fillText((LANG==="en"?"D":"")+(dd+1)+(LANG==="zh"?"天":LANG==="ja"?"日":""),x+4*d,h-8*d); }
+  // training shade
+  ctx.fillStyle=css("--water-soft"); ctx.fillRect(L,T,X(TRAIN)-L,h-T-B);
+  // expected band
+  ctx.fillStyle=css("--grid"); ctx.beginPath(); for(let i=0;i<N;i++){ const s=i%PER_DAY; ctx.lineTo(X(i),Y(exp[s]+3*sc[s])); } for(let i=N-1;i>=0;i--){ const s=i%PER_DAY; ctx.lineTo(X(i),Y(exp[s]-3*sc[s])); } ctx.closePath(); ctx.globalAlpha=.9; ctx.fill(); ctx.globalAlpha=1;
+  // events
+  for(const e of events){ ctx.fillStyle=css("--signal-soft"); ctx.fillRect(X(e.s)-3*d,T,Math.max(6*d,X(e.e)-X(e.s)+6*d),h-T-B); }
+  // line
+  ctx.strokeStyle=css("--water"); ctx.lineWidth=1.4*d; ctx.beginPath(); let pen=false; for(let i=0;i<N;i++){ const v=series[i]; if(isNaN(v)){ pen=false; continue; } const x=X(i),y=Y(v); if(!pen){ctx.moveTo(x,y);pen=true;} else ctx.lineTo(x,y); } ctx.stroke();
+  // event markers
+  ctx.fillStyle=css("--signal"); ctx.strokeStyle=css("--signal"); ctx.lineWidth=2*d;
+  for(const e of events){ ctx.beginPath(); ctx.moveTo(X(e.s),T); ctx.lineTo(X(e.e)+0.01,T); ctx.stroke(); ctx.fillText(t("f."+e.type),Math.min(X(e.s),w-R-70*d),T+12*d); }
+}
+$("#d1new").addEventListener("click",()=>{ seed=Math.floor(Math.random()*1e9); build(); runDetector(); });
+
+/* ---------- demo 2: flood gauge reader ---------- */
+let cond={rain:false,glare:false,murky:false,dusk:false}, gSeed=3;
+function renderCond(){
+  $("#d2cond").innerHTML=Object.keys(cond).map(k=>`<button type="button" class="toggle" data-c="${k}" aria-pressed="${cond[k]}">${esc(t("c."+k))}</button>`).join("");
+  document.querySelectorAll("#d2cond .toggle").forEach(b=>b.addEventListener("click",()=>{ cond[b.dataset.c]=!cond[b.dataset.c]; b.setAttribute("aria-pressed",String(cond[b.dataset.c])); readGauge(); }));
+}
+const GW=220, GH=440, TOP=30, BOT=410, GX0=86, GX1=134;   // gauge geometry in scene pixels
+function cmToY(cm){ return BOT-(BOT-TOP)*cm/800; }
+function renderScene(level){
+  const off=document.createElement("canvas"); off.width=GW; off.height=GH; const g=off.getContext("2d"); const r=rng(gSeed+Math.round(level));
+  // wall
+  const wall=g.createLinearGradient(0,0,GW,0); wall.addColorStop(0,"#8d8f88"); wall.addColorStop(1,"#a3a59d"); g.fillStyle=wall; g.fillRect(0,0,GW,GH);
+  for(let i=0;i<400;i++){ g.fillStyle=`rgba(60,60,55,${r()*0.15})`; g.fillRect(r()*GW,r()*GH,2,2); }
+  // gauge plate
+  g.fillStyle="#f4f3ee"; g.fillRect(GX0,TOP-12,GX1-GX0,BOT-TOP+24);
+  for(let cm=0;cm<=800;cm+=10){ const y=cmToY(cm); const big=cm%100===0, mid=cm%50===0; g.fillStyle="#1a1a1a"; g.fillRect(GX0,y-1,big?30:mid?22:12,2); }
+  for(let m=0;m<8;m++){ const y0=cmToY(m*100+100), y1=cmToY(m*100+80); g.fillStyle="#e2b417"; g.fillRect(GX1-14,y0,14,y1-y0); }
+  g.fillStyle="#1a1a1a"; g.font="bold 11px IBM Plex Mono, monospace"; for(let m=1;m<=8;m++){ g.fillText(String(m*100),GX0+31,cmToY(m*100)+4); }
+  // water
+  const wy=cmToY(level);
+  const wc=cond.murky?[128,112,82]:[52,92,98];
+  for(let y=Math.floor(wy-3);y<GH;y++){ const wave=Math.sin(y*0.7)*1.5; for(let x=0;x<GW;x+=2){ const surf=wy+Math.sin(x*0.09+level)*2.2; if(y<surf) continue; const n=(r()-.5)*18; g.fillStyle=`rgb(${wc[0]+n+wave},${wc[1]+n},${wc[2]+n})`; g.fillRect(x,y,2,1); } }
+  // reflection of gauge just below surface
+  g.fillStyle="rgba(240,240,230,0.18)"; g.fillRect(GX0,wy+2,GX1-GX0,12);
+  if(cond.glare){ const gr=g.createRadialGradient(GX0+30,wy+16,2,GX0+30,wy+16,46); gr.addColorStop(0,"rgba(255,255,250,0.75)"); gr.addColorStop(1,"rgba(255,255,250,0)"); g.fillStyle=gr; g.fillRect(0,wy-30,GW,90); }
+  if(cond.rain){ g.strokeStyle="rgba(230,235,240,0.45)"; g.lineWidth=1; for(let i=0;i<140;i++){ const x=r()*GW, y=r()*GH; g.beginPath(); g.moveTo(x,y); g.lineTo(x-3,y+14); g.stroke(); } }
+  if(cond.dusk){ g.fillStyle="rgba(20,25,45,0.45)"; g.fillRect(0,0,GW,GH); }
+  return off;
+}
+function readGauge(){
+  const level=+$("#d2lvl").value; const scene=renderScene(level);
+  const t0=performance.now();
+  const g=scene.getContext("2d"); const img=g.getImageData(GX0+4,0,GX1-GX0-20,GH).data; const W=GX1-GX0-20;
+  // reference: gauge plate brightness measured on the top calibration band (always dry)
+  const rowStats=y=>{ let sb=0,sr=0,sg=0,sbl=0,cnt=0; for(let x=0;x<W;x++){ const k=(y*W+x)*4; const R=img[k],G=img[k+1],Bc=img[k+2]; const br=(R+G+Bc)/3; if(br<70) continue; sb+=br; sr+=R; sg+=G; sbl+=Bc; cnt++; } return cnt?{br:sb/cnt,R:sr/cnt,G:sg/cnt,B:sbl/cnt,cnt}:{br:0,R:0,G:0,B:0,cnt:0}; };
+  let ref=0,rn=0; for(let y=TOP-8;y<TOP+30;y++){ const s=rowStats(y); if(s.cnt){ ref+=s.br; rn++; } } ref/=rn||1;
+  // a row is "plate" when it is bright relative to the reference and low in saturation
+  const isPlate=y=>{ const s=rowStats(y); if(!s.cnt) return false; const mx=Math.max(s.R,s.G,s.B), mn=Math.min(s.R,s.G,s.B); const sat=(mx-mn)/(mx||1); return s.br>ref*0.78 && sat<0.22 && s.cnt>W*0.35; };
+  // scan downward; the water line is the first row after which 10 of the next 12 rows are not plate
+  let plateY=BOT;
+  for(let y=TOP;y<BOT;y++){ if(isPlate(y)) continue; let not=0; for(let k=0;k<12;k++) if(!isPlate(y+k)) not++; if(not>=10){ plateY=y; break; } }
+  // second cue: the water surface also crosses the concrete wall beside the gauge; water is far more saturated than wet concrete
+  const WX0=GX1+34, WW=GW-WX0-4; const wimg=g.getImageData(WX0,0,WW,GH).data;
+  const wallSat=y=>{ let s=0; for(let x=0;x<WW;x++){ const k=(y*WW+x)*4; const R=wimg[k],G=wimg[k+1],Bc=wimg[k+2]; const mx=Math.max(R,G,Bc),mn=Math.min(R,G,Bc); s+=(mx-mn)/(mx||1); } return s/WW; };
+  let dry=0; for(let y=4;y<TOP+20;y++) dry+=wallSat(y); dry/=(TOP+16);   // saturation of dry wall in this lighting
+  let wallY=-1; for(let y=TOP;y<BOT+20&&y<GH-8;y++){ let wet=0; for(let k=0;k<8;k++) if(wallSat(y+k)>dry+0.08) wet++; if(wet>=7){ wallY=y; break; } }
+  // trust the wall cue when the plate is washed out by glare (plate line far below the wall line)
+  const found=(wallY>0&&Math.abs(plateY-wallY)>10)?wallY:plateY;
+  const est=Math.max(0,Math.min(800,(BOT-found)/(BOT-TOP)*800));
+  const ms=performance.now()-t0;
+  // draw scene + detection
+  const c=$("#d2c"); const {ctx,w,h}=fitCanvas(c); ctx.imageSmoothingEnabled=true; ctx.drawImage(scene,0,0,w,h);
+  const sy=found*h/GH; ctx.strokeStyle=css("--signal")||"#c4700f"; ctx.lineWidth=Math.max(2,w/110); ctx.setLineDash([6,4]); ctx.beginPath(); ctx.moveTo(0,sy); ctx.lineTo(w,sy); ctx.stroke(); ctx.setLineDash([]);
+  $("#d2est").textContent=Math.round(est)+" cm";
+  $("#d2err").textContent=t("d2.err",{e:(est-level>=0?"+":"−")+Math.abs(est-level).toFixed(0), t:ms.toFixed(1)});
+}
+$("#d2lvl").addEventListener("input",readGauge);
+
+function applyLang() {
+  document.documentElement.lang = LANG === "zh" ? "zh-Hans" : LANG;
+  document.querySelectorAll("[data-t]").forEach((el) => (el.textContent = t(el.dataset.t)));
+  document.querySelectorAll(".langs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === LANG)));
+  renderFaultToggles(); renderCond(); runDetector(); readGauge();
+}
+document.querySelectorAll(".langs button").forEach((b) => b.addEventListener("click", () => { LANG = b.dataset.lang; try { localStorage.setItem("lang", LANG); } catch (e) {} applyLang(); }));
+// Canvas colours come from CSS variables, so redraw when the theme or size changes.
+document.addEventListener("themechange", () => { runDetector(); readGauge(); });
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { runDetector(); readGauge(); }, 120); });
+build(); applyLang();
+</script>
+</body>
+</html>

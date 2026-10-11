@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic assistant over operational data · Sanny Hong</title>
+<meta name="description" content="Production LLM agents over operational data: read-only tools, −84% tokens per question, per-request cost caps, and ground-truth checks that caught a silent mis-join.">
+<script src="../assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body data-base="../">
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><i></i>sanny.hong</a>
+    <nav>
+      <a href="../index.html#work" data-t="nav.work">Work</a>
+      <a href="../demos.html" data-t="nav.demos">Demos</a>
+      <a href="../index.html#contact" data-t="nav.contact">Contact</a>
+    </nav>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+    </div>
+    <button class="theme" type="button" aria-label="Switch theme"></button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap case-hero">
+    <div class="meta" data-t="c.meta"></div>
+    <h1 data-t="c.h1">Agentic assistant over operational data</h1>
+    <p class="lede" data-t="c.lede"></p>
+    <nav class="toc">
+      <a href="#result" data-t="c.toc1"></a><a href="#what" data-t="c.toc2"></a><a href="#architecture" data-t="c.toc3"></a>
+      <a href="#decisions" data-t="c.toc4"></a><a href="#verified" data-t="c.toc5"></a><a href="#again" data-t="c.toc6"></a>
+    </nav>
+  </div>
+
+  <div class="wrap">
+    <section class="chapter" id="result">
+      <div class="meta">01 · <span data-t="c.toc1"></span></div>
+      <div>
+        <h2 data-t="c.r.h"></h2>
+        <div class="bars">
+          <div class="bar-row bad"><span class="meta" data-t="c.r.before"></span><div class="bar"><i style="width:100%"></i></div><b>232,809</b></div>
+          <div class="bar-row good"><span class="meta" data-t="c.r.after"></span><div class="bar"><i style="width:15.6%"></i></div><b>36,282</b></div>
+        </div>
+        <p class="caption" data-t="c.r.p"></p>
+        <div class="stats">
+          <div data-icon="pin"><b>447</b><span data-t="c.k1"></span></div>
+          <div data-icon="db"><b>19M</b><span data-t="c.k2"></span></div>
+          <div data-icon="lock"><b>0</b><span data-t="c.k3"></span></div>
+          <div data-icon="coins"><b>US$ cap</b><span data-t="c.k4"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="what">
+      <div class="meta">02 · <span data-t="c.toc2"></span></div>
+      <div>
+        <h2 data-t="c.w.h"></h2>
+        <div class="qa">
+          <div class="bubble" data-t="c.w.q1"></div>
+          <div class="bubble" data-t="c.w.q2"></div>
+        </div>
+        <div class="evolve">
+          <div class="stage old"><span class="meta">v1</span><b data-t="c.w.v1"></b></div>
+          <i aria-hidden="true">→</i>
+          <div class="stage new"><span class="meta">v2</span><b data-t="c.w.v2"></b>
+            <div class="chips"><span class="chip" data-icon="chart"><span data-t="c.w.c1"></span></span><span class="chip" data-icon="chart"><span data-t="c.w.c2"></span></span><span class="chip" data-icon="file"><span data-t="c.w.c3"></span></span><span class="chip" data-icon="spark"><span data-t="c.w.c4"></span></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="architecture">
+      <div class="meta">03 · <span data-t="c.toc3"></span></div>
+      <div>
+        <h2 data-t="c.a.h"></h2>
+        <div class="diagram" role="img" aria-label="Architecture: operator question to agent loop, through a tool gate and budget check, to read-only parameterised SQL tools over the time-series and work-order databases; a schema-relationship context feeds the agent; every step is traced; ground-truth scripts check answers against direct SQL.">
+          <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--faint)"/></marker>
+            </defs>
+            <g font-size="12" fill="var(--ink)">
+              <rect x="12" y="140" width="118" height="64" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="71" y="166" text-anchor="middle" font-weight="600">Operator</text><text x="71" y="184" text-anchor="middle" fill="var(--muted)" font-size="10.5">chat · question</text>
+
+              <rect x="170" y="128" width="150" height="88" rx="10" fill="var(--signal-soft)" stroke="var(--signal)"/>
+              <text x="245" y="156" text-anchor="middle" font-weight="600">Agent loop</text>
+              <text x="245" y="174" text-anchor="middle" fill="var(--muted)" font-size="10.5">provider-agnostic</text>
+              <text x="245" y="190" text-anchor="middle" fill="var(--muted)" font-size="10.5">OpenAI · Anthropic</text>
+
+              <rect x="360" y="128" width="140" height="88" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="430" y="156" text-anchor="middle" font-weight="600">Tool gate</text>
+              <text x="430" y="174" text-anchor="middle" fill="var(--muted)" font-size="10.5">keyword gating</text>
+              <text x="430" y="190" text-anchor="middle" fill="var(--muted)" font-size="10.5">US$ budget check</text>
+
+              <rect x="540" y="128" width="200" height="88" rx="10" fill="var(--water-soft)" stroke="var(--water)"/>
+              <text x="640" y="156" text-anchor="middle" font-weight="600">Read-only SQL tools</text>
+              <text x="640" y="174" text-anchor="middle" fill="var(--muted)" font-size="10.5">parameterised · no writes</text>
+              <text x="640" y="190" text-anchor="middle" fill="var(--muted)" font-size="10.5">compact results</text>
+
+              <rect x="540" y="262" width="96" height="72" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="588" y="286" text-anchor="middle" font-weight="600">Time series</text><text x="588" y="303" text-anchor="middle" fill="var(--muted)" font-size="10.5">447 sites</text><text x="588" y="318" text-anchor="middle" fill="var(--muted)" font-size="10.5">19M rows</text>
+              <rect x="644" y="262" width="96" height="72" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="692" y="286" text-anchor="middle" font-weight="600">Work orders</text><text x="692" y="303" text-anchor="middle" fill="var(--muted)" font-size="10.5">maintenance</text>
+
+              <rect x="170" y="20" width="150" height="62" rx="10" fill="var(--paper)" stroke="var(--rule)" stroke-dasharray="4 3"/>
+              <text x="245" y="46" text-anchor="middle" font-weight="600">Schema context</text><text x="245" y="64" text-anchor="middle" fill="var(--muted)" font-size="10.5">how tables relate</text>
+              <rect x="170" y="262" width="150" height="72" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="245" y="290" text-anchor="middle" font-weight="600">Trace log</text><text x="245" y="308" text-anchor="middle" fill="var(--muted)" font-size="10.5">every step · JSONL</text>
+              <rect x="360" y="262" width="140" height="72" rx="10" fill="var(--paper)" stroke="var(--ok)"/>
+              <text x="430" y="286" text-anchor="middle" font-weight="600">Ground truth</text><text x="430" y="303" text-anchor="middle" fill="var(--muted)" font-size="10.5">answer vs direct SQL</text><text x="430" y="318" text-anchor="middle" fill="var(--ok)" font-size="10.5">✓ match / ✗ flag</text>
+            </g>
+            <g stroke="var(--faint)" stroke-width="1.6" fill="none" marker-end="url(#ah)">
+              <path class="flow" d="M130 172 H166"/>
+              <path class="flow" d="M320 172 H356"/>
+              <path class="flow" d="M500 172 H536"/>
+              <path class="flow" d="M610 216 V258"/>
+              <path class="flow" d="M680 216 V258"/>
+              <path d="M245 82 V124"/>
+              <path d="M245 216 V258"/>
+              <path d="M500 298 H536" stroke="var(--ok)"/>
+              <text x="502" y="290" font-size="10" fill="var(--ok)" stroke="none">SQL</text>
+              <path d="M300 216 L392 258" stroke="var(--ok)"/>
+              <text x="356" y="232" font-size="10" fill="var(--ok)" stroke="none">answer</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="decisions">
+      <div class="meta">04 · <span data-t="c.toc4"></span></div>
+      <div>
+        <h2 data-t="c.d.h"></h2>
+        <div class="dtiles" id="decisionList"></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="verified">
+      <div class="meta">05 · <span data-t="c.toc5"></span></div>
+      <div>
+        <h2 data-t="c.v.h"></h2>
+        <p class="caption" data-t="c.v.p1"></p>
+        <div class="compare">
+          <div class="bad"><span class="meta" data-t="c.v.before"></span><b>1</b><span data-t="c.v.beforeS"></span><div class="viz" id="vizBad"></div></div>
+          <div class="good"><span class="meta" data-t="c.v.after"></span><b>46</b><span data-t="c.v.afterS"></span><div class="viz" id="vizGood"></div></div>
+        </div>
+        <div class="fix">
+          <div class="bad-x"><span class="meta" data-t="c.v.causeL"></span><b data-t="c.v.cause"></b></div>
+          <i aria-hidden="true">→</i>
+          <div class="good-x"><span class="meta" data-t="c.v.fixL"></span><b data-t="c.v.fix"></b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="again">
+      <div class="meta">06 · <span data-t="c.toc6"></span></div>
+      <div>
+        <h2 data-t="c.g.h"></h2>
+        <div class="tiles four" id="againList"></div>
+        <p class="meta" style="margin-top:28px" data-t="c.note"></p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="wrap"><span data-t="foot.l">© 2026 Sanny Hong</span><a href="../index.html" data-t="c.back">← Back to all work</a></div></footer>
+
+<script src="../assets/art.js"></script>
+<script src="../assets/i18n.js"></script>
+<script>
+/* Case-study copy. Facts here must match the resume: 447 stations, 19M rows, 232,809 → 36,282 tokens,
+   per-request USD caps, GPT-5 compatibility shim, JSONL step/run traces, mis-join 1 → 46. */
+(function () {
+  const C = {
+    en: {
+      'c.meta': 'Case study 01 · Production · Public water infrastructure · 2025–2026',
+      'c.h1': 'Agentic assistant over operational data',
+      'c.lede': 'LLM assistants that answer operators from production data: read-only, budget-capped, checked against ground truth.',
+      'c.toc1': 'Result', 'c.toc2': 'What it is', 'c.toc3': 'Architecture', 'c.toc4': 'Decisions', 'c.toc5': 'How it was verified', 'c.toc6': 'If I did it again',
+      'c.r.h': '−84% tokens per question',
+      'c.r.before': 'Before', 'c.r.after': 'After',
+      'c.r.p': 'Compact tool results + only the tools a question needs. Input + output, per question.',
+      'c.k1': 'stations', 'c.k2': 'time-series rows', 'c.k3': 'write paths', 'c.k4': 'on every request',
+      'c.w.h': 'Operators ask; the agent queries',
+      'c.w.q1': 'Which sites had the most maintenance work last quarter?',
+      'c.w.q2': 'How did this station behave before the alarm?',
+      'c.w.v1': 'Single-shot retrieval bot', 'c.w.v2': 'Tool-calling agent',
+      'c.w.c1': 'aggregation', 'c.w.c2': 'charts', 'c.w.c3': 'PDF reports', 'c.w.c4': 'fuzzy name matching',
+      'c.a.h': 'Architecture',
+      'c.d.h': 'Five decisions, five trade-offs',
+      'c.v.h': 'Ground truth caught a silent bug',
+      'c.v.p1': 'Each answer type is re-run as direct SQL on live data. No user had reported this one.',
+      'c.v.before': 'Agent said', 'c.v.beforeS': 'site for every work order',
+      'c.v.after': 'Data said', 'c.v.afterS': 'locations',
+      'c.v.causeL': 'Cause', 'c.v.cause': 'Joins guessed from column names',
+      'c.v.fixL': 'Fix', 'c.v.fix': 'Schema-relationship context, not a better prompt',
+      'c.g.h': 'If I did it again',
+      'c.note': 'Client, data and code stay private. Every number can be walked through in an interview.',
+      'c.back': '← Back to all work',
+    },
+    zh: {
+      'c.meta': '案例研究 01 · 生产系统 · 公共水务基础设施 · 2025–2026',
+      'c.h1': '运营数据上的智能体助手',
+      'c.lede': '为值班人员查询生产数据的 LLM 助手：只读、有预算上限、用标准答案校验。',
+      'c.toc1': '结果', 'c.toc2': '它是什么', 'c.toc3': '架构', 'c.toc4': '关键决策', 'c.toc5': '怎么验证', 'c.toc6': '如果重做',
+      'c.r.h': '每个问题的 token 减少 84%',
+      'c.r.before': '之前', 'c.r.after': '之后',
+      'c.r.p': '压缩工具结果 + 只开放问题需要的工具。按每个问题的输入 + 输出计算。',
+      'c.k1': '个站点', 'c.k2': '行时间序列', 'c.k3': '条写入路径', 'c.k4': '每个请求都有',
+      'c.w.h': '值班人员提问，智能体去查',
+      'c.w.q1': '上季度哪些站点的维修工作最多？',
+      'c.w.q2': '这个站点在告警前表现如何？',
+      'c.w.v1': '单轮检索机器人', 'c.w.v2': '调用工具的智能体',
+      'c.w.c1': '聚合统计', 'c.w.c2': '图表', 'c.w.c3': 'PDF 报告', 'c.w.c4': '名称模糊匹配',
+      'c.a.h': '架构',
+      'c.d.h': '五个决策，五个取舍',
+      'c.v.h': '标准答案抓到了一个隐性错误',
+      'c.v.p1': '每类答案都用直接 SQL 在真实数据上重跑一遍。这个错误没有任何用户报告过。',
+      'c.v.before': '智能体说', 'c.v.beforeS': '个站点承担了所有工单',
+      'c.v.after': '数据实际', 'c.v.afterS': '个地点',
+      'c.v.causeL': '原因', 'c.v.cause': '按字段名猜测表关联',
+      'c.v.fixL': '修复', 'c.v.fix': '加入表关系 context，而不是改提示词',
+      'c.g.h': '如果重做',
+      'c.note': '客户、数据和代码均保密。每个数字都可以在面试里讲清楚。',
+      'c.back': '← 返回全部项目',
+    },
+    ja: {
+      'c.meta': 'ケーススタディ 01 · 本番 · 公共水道インフラ · 2025–2026',
+      'c.h1': '運用データに対するエージェント',
+      'c.lede': '本番データでオペレーターに答える LLM アシスタント。読み取り専用・予算上限つき・正解データで検証。',
+      'c.toc1': '結果', 'c.toc2': '概要', 'c.toc3': 'アーキテクチャ', 'c.toc4': '設計判断', 'c.toc5': '検証方法', 'c.toc6': 'もう一度やるなら',
+      'c.r.h': '1 質問あたりのトークン −84%',
+      'c.r.before': '前', 'c.r.after': '後',
+      'c.r.p': 'ツール結果の圧縮 ＋ 質問に必要なツールだけを公開。1 質問あたりの入力 ＋ 出力。',
+      'c.k1': '拠点', 'c.k2': '行の時系列', 'c.k3': '書き込み経路', 'c.k4': '全リクエストに適用',
+      'c.w.h': 'オペレーターが聞き、エージェントが調べる',
+      'c.w.q1': '前四半期に保守作業が最も多かった拠点は？',
+      'c.w.q2': 'アラーム前、この拠点はどう推移した？',
+      'c.w.v1': '単発の検索ボット', 'c.w.v2': 'ツール呼び出し型エージェント',
+      'c.w.c1': '集計', 'c.w.c2': 'グラフ', 'c.w.c3': 'PDF レポート', 'c.w.c4': '名前のあいまい照合',
+      'c.a.h': 'アーキテクチャ',
+      'c.d.h': '5 つの判断と 5 つのトレードオフ',
+      'c.v.h': '正解データが隠れたバグを発見',
+      'c.v.p1': '回答の種類ごとに実データで直接 SQL を再実行。利用者は誰も報告していませんでした。',
+      'c.v.before': 'エージェント', 'c.v.beforeS': '拠点にすべての作業指示',
+      'c.v.after': '実データ', 'c.v.afterS': '拠点',
+      'c.v.causeL': '原因', 'c.v.cause': '列名から結合を推測していた',
+      'c.v.fixL': '修正', 'c.v.fix': 'プロンプトではなくスキーマ関係コンテキスト',
+      'c.g.h': 'もう一度やるなら',
+      'c.note': '顧客・データ・コードは非公開。すべての数字は面接で説明できます。',
+      'c.back': '← すべての実績へ戻る',
+    },
+  };
+  const DECISIONS = [
+    { i: 'lock', h: { en: 'Read-only, parameterised SQL tools', zh: '只读、参数化的 SQL 工具', ja: '読み取り専用・パラメータ化 SQL' },
+      gain: { en: 'Production data cannot be changed', zh: '生产数据无法被改动', ja: '本番データは変更できない' },
+      cost: { en: 'New question types need new tools', zh: '新类型问题需要新工具', ja: '新しい質問には新しいツールが必要' } },
+    { i: 'swap', h: { en: 'Provider-agnostic model layer', zh: '与服务商无关的模型层', ja: 'プロバイダー非依存のモデル層' },
+      gain: { en: 'Swap OpenAI ↔ Anthropic; GPT-5 API shim', zh: 'OpenAI ↔ Anthropic 随时切换；GPT-5 兼容层', ja: 'OpenAI ↔ Anthropic を切替、GPT-5 互換層' },
+      cost: { en: 'Provider-only features stay behind one interface', zh: '独有功能只能在共用接口后使用', ja: '固有機能は共通インターフェースの裏側のみ' } },
+    { i: 'funnel', h: { en: 'Compact results, gate tools by keyword', zh: '压缩结果，按关键词开放工具', ja: '結果を圧縮し、キーワードでツールを絞る' },
+      gain: { en: '232,809 → 36,282 tokens, under rate limits', zh: '232,809 → 36,282 token，不超速率限制', ja: '232,809 → 36,282 トークン、レート制限内' },
+      cost: { en: 'A wrong gate can hide a needed tool', zh: '闸门判断错会藏起需要的工具', ja: 'ゲートを誤ると必要なツールが隠れる' } },
+    { i: 'coins', h: { en: 'Per-request US$ cost caps', zh: '每个请求的美元成本上限', ja: 'リクエストごとの US$ 上限' },
+      gain: { en: 'A runaway loop cannot burn money', zh: '失控循环不会烧钱', ja: '暴走ループで費用を浪費しない' },
+      cost: { en: 'Long analyses may stop early, and say so', zh: '长分析可能提前停止，并明确告知', ja: '長い分析は途中で止まり、それを明示' } },
+    { i: 'schema', h: { en: 'Schema-relationship context', zh: '表关系 context', ja: 'スキーマ関係コンテキスト' },
+      gain: { en: 'No more guessed joins', zh: '不再靠猜来关联表', ja: '結合を推測しなくなった' },
+      cost: { en: 'Must be updated when the schema changes', zh: '表结构变动时要同步更新', ja: 'スキーマ変更のたびに更新が必要' } },
+  ];
+  const AGAIN = [
+    { i: 'flask', h: { en: 'A golden set per question type, in CI', zh: '每类问题一套标准测试集，接入 CI', ja: '質問タイプ別ゴールデンセットを CI に' } },
+    { i: 'scale', h: { en: 'An LLM judge calibrated on my labels', zh: '用我的标注校准 LLM judge', ja: '自分のラベルで較正した LLM judge' } },
+    { i: 'route', h: { en: 'Route easy questions to a cheaper model', zh: '简单问题路由给更便宜的模型', ja: '簡単な質問は安価なモデルへ' } },
+    { i: 'pulse', h: { en: 'OpenTelemetry instead of custom logs', zh: '用 OpenTelemetry 取代自定义日志', ja: '独自ログの代わりに OpenTelemetry' } },
+  ];
+
+  // Mis-join illustration: work orders on the left, sites on the right.
+  function misjoin(good) {
+    const orders = Array.from({ length: 8 }, (_, i) => [18, 12 + i * 16]);
+    const sites = good
+      ? Array.from({ length: 46 }, (_, i) => [150 + (i % 8) * 14, 22 + Math.floor(i / 8) * 21])
+      : [[220, 74]];
+    const colour = good ? 'var(--ok)' : 'var(--bad)';
+    const links = orders.map(([x, y], i) => {
+      const [sx, sy] = good ? sites[(i * 7 + 3) % 46] : sites[0];
+      return `<path d="M${x + 6} ${y}C${(x + sx) / 2} ${y} ${(x + sx) / 2} ${sy} ${sx - 4} ${sy}" stroke="${colour}" stroke-width="1.2" fill="none" opacity="0.7"/>`;
+    }).join('');
+    const o = orders.map(([x, y]) => `<rect x="${x - 6}" y="${y - 5}" width="12" height="10" rx="2" fill="var(--panel)" stroke="var(--muted)"/>`).join('');
+    const s = sites.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="${good ? 4 : 9}" fill="${colour}" opacity="${good ? 0.85 : 1}"/>`).join('');
+    return `<svg viewBox="0 0 260 150" aria-hidden="true">${links}${o}${s}<text x="12" y="146" font-size="9.5" fill="var(--faint)">work orders</text><text x="${good ? 150 : 200}" y="146" font-size="9.5" fill="var(--faint)">sites</text></svg>`;
+  }
+
+  let lang = 'en';
+  try { const s = localStorage.getItem('lang'); if (['en', 'zh', 'ja'].includes(s)) lang = s; else if ((navigator.language || '').startsWith('zh')) lang = 'zh'; else if ((navigator.language || '').startsWith('ja')) lang = 'ja'; } catch (e) {}
+  const asked = new URL(location.href).searchParams.get('lang');
+  if (['en', 'zh', 'ja'].includes(asked)) lang = asked;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const t = (k) => (C[lang][k] ?? window.I18N[lang][k] ?? C.en[k] ?? window.I18N.en[k] ?? k);
+  function render() {
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : lang;
+    document.querySelectorAll('[data-t]').forEach((el) => (el.textContent = t(el.dataset.t)));
+    document.querySelectorAll('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    document.getElementById('decisionList').innerHTML = DECISIONS.map((d, n) =>
+      `<div class="dtile">${window.icon(d.i)}<div><span class="meta">${String(n + 1).padStart(2, '0')}</span><h3>${esc(d.h[lang])}</h3><p class="plus">${esc(d.gain[lang])}</p><p class="minus">${esc(d.cost[lang])}</p></div></div>`).join('');
+    document.getElementById('againList').innerHTML = AGAIN.map((a) => `<div class="tile">${window.icon(a.i)}<b>${esc(a.h[lang])}</b></div>`).join('');
+  }
+  document.querySelectorAll('.langs button').forEach((b) => b.addEventListener('click', () => { lang = b.dataset.lang; try { localStorage.setItem('lang', lang); } catch (e) {} render(); }));
+  document.getElementById('vizBad').innerHTML = misjoin(false);
+  document.getElementById('vizGood').innerHTML = misjoin(true);
+  window.paintArt();
+  render();
+})();
+</script>
+</body>
+</html>
