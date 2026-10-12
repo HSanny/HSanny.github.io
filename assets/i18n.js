@@ -157,10 +157,10 @@ window.WORK = [
   },
   {
     id: 'tapesense', badges: ['LIVE PRODUCT', 'CASE STUDY'], href: 'work/tapesense.html', caseStudy: true,
-    t: { en: 'TapeSense · investing-logic app', zh: '盘感 · 投资逻辑 App', ja: 'TapeSense · 投資ロジックアプリ' },
-    d: { en: 'How data releases move markets, checked against real prices.', zh: '经济数据如何影响市场，再用真实行情检验。', ja: '経済指標が市場をどう動かすかを、実際の値動きで検証。' },
-    k: [['71', { en: 'tests', zh: '个测试', ja: 'テスト' }], ['12', { en: 'events vs real prices', zh: '个事件对照行情', ja: 'イベントを検証' }]],
-    v: { en: 'Each reaction measured, marked matched or missed', zh: '每次反应实测，标记符合 / 不符', ja: '反応を実測し一致 / 不一致を表示' },
+    t: { en: 'TapeSense · macroeconomic knowledge graph', zh: '盘感 · 宏观经济知识图谱', ja: 'TapeSense · マクロ経済ナレッジグラフ' },
+    d: { en: 'Macro cause and effect as a graph, each link tested against real prices. Self-updating graph and agents in progress.', zh: '把宏观因果建成图谱，每条链用真实行情检验。自我更新的图谱和智能体开发中。', ja: 'マクロの因果をグラフ化し、各リンクを実際の値動きで検証。自己更新グラフとエージェントは開発中。' },
+    k: [['92', { en: 'tests', zh: '个测试', ja: 'テスト' }], ['12', { en: 'events vs real prices', zh: '个事件对照行情', ja: 'イベントを検証' }]],
+    v: { en: 'Each link measured after every release, marked matched or missed', zh: '每次公布后实测每条链，标记符合 / 不符', ja: '発表ごとに各リンクを実測し一致 / 不一致を表示' },
   },
   {
     id: 'forecast', badges: ['CODE', 'AGENT'], href: 'https://github.com/HSanny/forecasting-engine', external: true,
