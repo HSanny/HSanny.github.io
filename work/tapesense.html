@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TapeSense investing-logic app · Sanny Hong</title>
+<meta name="description" content="TapeSense: an app that explains how data releases move rates, the dollar, gold, stocks and crypto, and checks every explanation against real prices.">
+<script src="../assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  .flowsteps { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+  .flowsteps span { font: 500 12.5px var(--f-mono); padding: 5px 9px; border-radius: 8px; background: var(--paper); border: 1px solid var(--rule); }
+  .flowsteps i { font-style: normal; color: var(--faint); }
+  .flowsteps span.human { border-color: var(--signal); color: var(--signal); }
+  .status { font: 600 10.5px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border-radius: 4px; background: var(--signal-soft); color: var(--signal); }
+  .guards { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .guards span { font-size: 13px; padding: 4px 9px; border-radius: 999px; border: 1px dashed var(--rule); color: var(--muted); }
+  .dtile p.why { color: var(--muted); }
+  .dtile p.why::before { content: "→"; position: absolute; left: 0; color: var(--faint); font: 600 13px var(--f-mono); }
+  .private { display: inline-flex; gap: 8px; align-items: center; font: 500 12.5px var(--f-mono); color: var(--muted); margin-top: 14px; }
+</style>
+</head>
+<body data-base="../">
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><i></i>sanny.hong</a>
+    <nav>
+      <a href="../index.html#work" data-t="nav.work">Work</a>
+      <a href="../demos.html" data-t="nav.demos">Demos</a>
+      <a href="../index.html#contact" data-t="nav.contact">Contact</a>
+    </nav>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+    </div>
+    <button class="theme" type="button" aria-label="Switch theme"></button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap case-hero">
+    <div class="meta" data-t="t.meta"></div>
+    <h1 data-t="t.h1">TapeSense · investing-logic app</h1>
+    <p class="lede" data-t="t.lede"></p>
+    <div class="cta">
+      <a class="btn primary" href="https://tapesense--preview.expo.app" target="_blank" rel="noopener" data-t="t.open">Open the live app ↗</a>
+    </div>
+    <div class="private" data-icon="lock"><span data-t="t.private"></span></div>
+    <nav class="toc">
+      <a href="#idea" data-t="t.toc1"></a><a href="#flow" data-t="t.toc2"></a><a href="#smart" data-t="t.toc3"></a>
+      <a href="#agents" data-t="t.toc4"></a><a href="#problems" data-t="t.toc5"></a>
+    </nav>
+  </div>
+
+  <div class="wrap">
+    <section class="chapter" id="idea">
+      <div class="meta">01 · <span data-t="t.toc1"></span></div>
+      <div>
+        <h2 data-t="t.i.h"></h2>
+        <div class="qa">
+          <div class="bubble" data-t="t.i.q1"></div>
+          <div class="bubble" data-t="t.i.q2"></div>
+        </div>
+        <div class="evolve">
+          <div class="stage old"><span class="meta" data-t="t.i.gapL"></span><b data-t="t.i.gap"></b></div>
+          <i aria-hidden="true">→</i>
+          <div class="stage new"><span class="meta" data-t="t.i.ansL"></span><b data-t="t.i.ans"></b></div>
+        </div>
+        <div class="stats">
+          <div data-icon="route"><b>9</b><span data-t="t.k1"></span></div>
+          <div data-icon="check"><b>12</b><span data-t="t.k2"></span></div>
+          <div data-icon="globe"><b>4</b><span data-t="t.k3"></span></div>
+          <div data-icon="flask"><b>72</b><span data-t="t.k4"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="flow">
+      <div class="meta">02 · <span data-t="t.toc2"></span></div>
+      <div>
+        <h2 data-t="t.f.h"></h2>
+        <p class="caption" data-t="t.f.p"></p>
+        <div class="diagram" role="img" aria-label="Data flow: four public data sources are normalised, feed four rule-based engines, pass through a language layer into the app, with anonymous analytics; two agents in progress call the engines as read-only tools.">
+          <svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--faint)"/></marker></defs>
+            <g font-size="12" fill="var(--ink)">
+              <text x="12" y="14" font-size="10" fill="var(--faint)">SOURCES · public, no keys</text>
+              <rect x="12" y="22" width="160" height="58" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="92" y="46" text-anchor="middle" font-weight="600">Market data</text><text x="92" y="64" text-anchor="middle" fill="var(--muted)" font-size="10">prices · OI · funding</text>
+              <rect x="12" y="96" width="160" height="58" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="92" y="120" text-anchor="middle" font-weight="600">FX rates</text><text x="92" y="138" text-anchor="middle" fill="var(--muted)" font-size="10">ECB · DXY computed</text>
+              <rect x="12" y="170" width="160" height="58" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="92" y="194" text-anchor="middle" font-weight="600">US Treasury yields</text><text x="92" y="212" text-anchor="middle" fill="var(--muted)" font-size="10">daily curve</text>
+              <rect x="12" y="244" width="160" height="58" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="92" y="268" text-anchor="middle" font-weight="600">Release calendar</text><text x="92" y="286" text-anchor="middle" fill="var(--muted)" font-size="10">32 US releases → .ics</text>
+
+              <rect x="206" y="110" width="124" height="104" rx="10" fill="var(--water-soft)" stroke="var(--water)"/>
+              <text x="268" y="152" text-anchor="middle" font-weight="600">Normalise</text><text x="268" y="170" text-anchor="middle" fill="var(--muted)" font-size="10">one format</text><text x="268" y="186" text-anchor="middle" fill="var(--muted)" font-size="10">failures isolated</text>
+
+              <text x="368" y="14" font-size="10" fill="var(--faint)">ENGINES · rule-based</text>
+              <rect x="368" y="22" width="190" height="58" rx="10" fill="var(--signal-soft)" stroke="var(--signal)"/>
+              <text x="463" y="46" text-anchor="middle" font-weight="600">Logic chains</text><text x="463" y="64" text-anchor="middle" fill="var(--muted)" font-size="10">9 cause-and-effect paths</text>
+              <rect x="368" y="96" width="190" height="58" rx="10" fill="var(--signal-soft)" stroke="var(--signal)"/>
+              <text x="463" y="120" text-anchor="middle" font-weight="600">Evidence engine</text><text x="463" y="138" text-anchor="middle" fill="var(--muted)" font-size="10">15m · 1h · 24h → match / miss</text>
+              <rect x="368" y="170" width="190" height="58" rx="10" fill="var(--signal-soft)" stroke="var(--signal)"/>
+              <text x="463" y="194" text-anchor="middle" font-weight="600">Signal reader</text><text x="463" y="212" text-anchor="middle" fill="var(--muted)" font-size="10">who leads · who is crowded</text>
+              <rect x="368" y="244" width="190" height="58" rx="10" fill="var(--signal-soft)" stroke="var(--signal)"/>
+              <text x="463" y="268" text-anchor="middle" font-weight="600">Unusual-move radar</text><text x="463" y="286" text-anchor="middle" fill="var(--muted)" font-size="10">scan · flag · explain</text>
+
+              <rect x="596" y="22" width="152" height="70" rx="10" fill="var(--paper)" stroke="var(--rule)"/>
+              <text x="672" y="50" text-anchor="middle" font-weight="600">Language layer</text><text x="672" y="68" text-anchor="middle" fill="var(--muted)" font-size="10">EN · 简体 · 繁體 TW/HK</text>
+              <rect x="596" y="118" width="152" height="80" rx="10" fill="var(--panel)" stroke="var(--ink)"/>
+              <text x="672" y="150" text-anchor="middle" font-weight="600">App</text><text x="672" y="168" text-anchor="middle" fill="var(--muted)" font-size="10">one codebase · web live</text>
+              <rect x="596" y="224" width="152" height="78" rx="10" fill="var(--paper)" stroke="var(--ok)"/>
+              <text x="672" y="254" text-anchor="middle" font-weight="600">Analytics + survey</text><text x="672" y="272" text-anchor="middle" fill="var(--muted)" font-size="10">anonymous · opt-out</text>
+
+              <rect x="368" y="340" width="380" height="84" rx="12" fill="none" stroke="var(--signal)" stroke-dasharray="5 4"/>
+              <text x="384" y="364" font-weight="600" fill="var(--signal)">Agents · building</text>
+              <text x="384" y="386" fill="var(--muted)" font-size="10.5">release-night agent · Ask TapeSense tutor</text>
+              <text x="384" y="404" fill="var(--muted)" font-size="10.5">engines as read-only tools · human approves</text>
+            </g>
+            <g stroke="var(--faint)" stroke-width="1.5" fill="none" marker-end="url(#ah2)">
+              <path class="flow" d="M172 51 C190 51 190 130 204 130"/>
+              <path class="flow" d="M172 125 C188 125 188 150 204 150"/>
+              <path class="flow" d="M172 199 C188 199 188 175 204 175"/>
+              <path class="flow" d="M172 273 C190 273 190 196 204 196"/>
+              <path class="flow" d="M330 140 C350 140 350 51 366 51"/>
+              <path class="flow" d="M330 155 C350 155 350 125 366 125"/>
+              <path class="flow" d="M330 170 C350 170 350 199 366 199"/>
+              <path class="flow" d="M330 185 C350 185 350 273 366 273"/>
+              <path class="flow" d="M558 120 C576 120 576 57 594 57"/>
+              <path d="M672 92 V116"/>
+              <path d="M672 198 V222"/>
+              <path d="M463 302 V338" stroke="var(--signal)" stroke-dasharray="4 4"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="smart">
+      <div class="meta">03 · <span data-t="t.toc3"></span></div>
+      <div>
+        <h2 data-t="t.s.h"></h2>
+        <p class="caption" data-t="t.s.p"></p>
+        <div class="dtiles" id="smartList"></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="agents">
+      <div class="meta">04 · <span data-t="t.toc4"></span></div>
+      <div>
+        <h2 data-t="t.a.h"></h2>
+        <p class="caption" data-t="t.a.p"></p>
+        <div class="dtiles" id="agentList"></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="problems">
+      <div class="meta">05 · <span data-t="t.toc5"></span></div>
+      <div>
+        <h2 data-t="t.p.h"></h2>
+        <div class="dtiles" id="problemList"></div>
+        <p class="meta" style="margin-top:28px" data-t="t.note"></p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="wrap"><span data-t="foot.l">© 2026 Sanny Hong</span><a href="../index.html" data-t="t.back">← Back to all work</a></div></footer>
+
+<script src="../assets/art.js"></script>
+<script src="../assets/i18n.js"></script>
+<script>
+/* TapeSense case study. The code is private (commercial product): describe what each part does and how
+   problems were solved, never exact rules, thresholds or formulas. Agents are marked as in progress until shipped. */
+(function () {
+  const C = {
+    en: {
+      't.meta': 'Case study 02 · Live product · 2026',
+      't.h1': 'TapeSense · investing-logic app',
+      't.lede': 'An app that explains how data releases move rates, the dollar, gold, stocks and crypto, then checks every explanation against what prices actually did.',
+      't.open': 'Open the live app ↗',
+      't.private': 'Code private · commercial product',
+      't.toc1': 'The idea', 't.toc2': 'Data flow', 't.toc3': 'Smart components', 't.toc4': 'Agents', 't.toc5': 'Problems solved',
+      't.i.h': 'Close the information gap',
+      't.i.q1': 'The news says "CPI hotter than expected". Why did my gold fall?',
+      't.i.q2': 'Everyone says the Fed matters. How does it reach my portfolio?',
+      't.i.gapL': 'The gap', 't.i.gap': 'Headlines without the chain of cause and effect',
+      't.i.ansL': 'TapeSense', 't.i.ans': 'Every link explained, then checked against real prices',
+      't.k1': 'logic chains', 't.k2': 'events measured', 't.k3': 'languages', 't.k4': 'automated tests',
+      't.f.h': 'From public data to a checked explanation',
+      't.f.p': 'Four public sources, normalised once, feed four rule-based engines. A language layer turns one Simplified-Chinese source into Taiwan and Hong Kong wording.',
+      't.s.h': 'Four rule-based engines',
+      't.s.p': 'Deterministic by design: the same data always gives the same answer, so every result can be tested and explained.',
+      't.a.h': 'Agents in progress',
+      't.a.p': 'Built on the engines above, which become read-only tools. Status: building.',
+      't.p.h': 'Problems and how they were solved',
+      't.note': 'Code, rules and data pipeline are private. Each problem here can be walked through in an interview.',
+      't.back': '← Back to all work',
+      'lbl.problem': 'Problem', 'lbl.fix': 'Fix', 'lbl.does': 'Does', 'lbl.why': 'Why it matters', 'lbl.guards': 'Guardrails', 'lbl.status': 'Building',
+    },
+    zh: {
+      't.meta': '案例研究 02 · 已上线产品 · 2026',
+      't.h1': '盘感 TapeSense · 投资逻辑 App',
+      't.lede': '讲清楚经济数据怎样影响利率、美元、黄金、股票和加密货币，再用真实行情检验每一个解释。',
+      't.open': '打开 App ↗',
+      't.private': '代码不公开 · 商业产品',
+      't.toc1': '想法', 't.toc2': '数据流', 't.toc3': '智能组件', 't.toc4': '智能体', 't.toc5': '解决的问题',
+      't.i.h': '补上信息差',
+      't.i.q1': '新闻说「CPI 高于预期」，为什么我的黄金跌了？',
+      't.i.q2': '大家都说美联储很重要，它到底怎么影响我的持仓？',
+      't.i.gapL': '信息差', 't.i.gap': '只有新闻标题，没有因果链',
+      't.i.ansL': '盘感', 't.i.ans': '每一环讲清楚，再用真实行情检验',
+      't.k1': '条逻辑链', 't.k2': '个事件已实测', 't.k3': '种语言', 't.k4': '个自动化测试',
+      't.f.h': '从公开数据到经过检验的解释',
+      't.f.p': '四个公开数据源统一整理后，送进四个规则型引擎。语言层把同一份简体内容转成台湾和香港用语。',
+      't.s.h': '四个规则型引擎',
+      't.s.p': '刻意设计成确定性：同样的数据永远得到同样的结果，所以每个结果都能测试、能解释。',
+      't.a.h': '开发中的智能体',
+      't.a.p': '建立在上面的引擎之上，引擎变成只读工具。状态：开发中。',
+      't.p.h': '遇到的问题和解法',
+      't.note': '代码、规则和数据流程不公开。这里的每个问题都可以在面试里讲清楚。',
+      't.back': '← 返回全部项目',
+      'lbl.problem': '问题', 'lbl.fix': '解法', 'lbl.does': '做什么', 'lbl.why': '为什么重要', 'lbl.guards': '安全规则', 'lbl.status': '开发中',
+    },
+    ja: {
+      't.meta': 'ケーススタディ 02 · 公開中のプロダクト · 2026',
+      't.h1': 'TapeSense · 投資ロジックアプリ',
+      't.lede': '経済指標が金利・ドル・金・株・暗号資産をどう動かすかを解説し、各説明を実際の値動きで検証するアプリ。',
+      't.open': 'アプリを開く ↗',
+      't.private': 'コード非公開 · 商用プロダクト',
+      't.toc1': 'アイデア', 't.toc2': 'データの流れ', 't.toc3': 'スマート機能', 't.toc4': 'エージェント', 't.toc5': '解決した課題',
+      't.i.h': '情報格差を埋める',
+      't.i.q1': '「CPI が予想を上回った」とニュース。なぜ金が下がったの？',
+      't.i.q2': 'FRB が大事と言うけれど、どうやって自分の資産に届くの？',
+      't.i.gapL': '格差', 't.i.gap': '見出しだけで、因果のつながりがない',
+      't.i.ansL': 'TapeSense', 't.i.ans': 'つながりを説明し、実際の値動きで検証',
+      't.k1': '本のロジックチェーン', 't.k2': '件のイベントを実測', 't.k3': '言語', 't.k4': '件の自動テスト',
+      't.f.h': '公開データから、検証された説明へ',
+      't.f.p': '4 つの公開データを一度正規化し、4 つのルールベースのエンジンへ。言語レイヤーが簡体字の原稿を台湾・香港の表現に変換します。',
+      't.s.h': '4 つのルールベースのエンジン',
+      't.s.p': '意図的に決定的な設計：同じデータなら常に同じ結果になり、すべてテストと説明が可能です。',
+      't.a.h': '開発中のエージェント',
+      't.a.p': '上のエンジンを読み取り専用ツールとして使います。ステータス：開発中。',
+      't.p.h': '課題と解決策',
+      't.note': 'コード・ルール・データ処理は非公開です。各課題は面接で説明できます。',
+      't.back': '← すべての実績へ戻る',
+      'lbl.problem': '課題', 'lbl.fix': '解決', 'lbl.does': '機能', 'lbl.why': '意義', 'lbl.guards': 'ガードレール', 'lbl.status': '開発中',
+    },
+  };
+
+  const SMART = [
+    { i: 'check', h: { en: 'Evidence engine', zh: '证据引擎', ja: 'エビデンスエンジン' },
+      does: { en: 'Measures gold, S&P 500, Nasdaq 100 and Bitcoin 15 minutes, 1 hour and 24 hours after each release', zh: '每次公布后，量黄金、标普 500、纳指 100、比特币 15 分钟、1 小时、24 小时的真实涨跌', ja: '各発表の 15 分・1 時間・24 時間後の金・S&P 500・ナスダック 100・ビットコインを測定' },
+      why: { en: 'Marks each move match or miss against the chain, so users see when the logic works and when it breaks', zh: '对照逻辑链标出「符合 / 不符」，让用户看到逻辑什么时候灵、什么时候失效', ja: 'チェーンと照合して一致 / 不一致を表示。ロジックが効く時と外れる時が分かる' } },
+    { i: 'pulse', h: { en: 'Signal reader', zh: '信号解读', ja: 'シグナルリーダー' },
+      does: { en: 'Reads price, open interest, funding and positioning together', zh: '把价格、未平仓量、资金费率和多空持仓放在一起读', ja: '価格・建玉・資金調達率・ポジションをまとめて読む' },
+      why: { en: 'Says who is driving the move and which side is crowded, in plain words', zh: '用白话说出谁在推动行情、哪一边太拥挤', ja: '誰が動かしているか、どちらが混雑しているかを平易に説明' } },
+    { i: 'eye', h: { en: 'Unusual-move radar', zh: '异动雷达', ja: '異常値レーダー' },
+      does: { en: 'Scans liquid futures markets for extreme moves, funding and leverage build-ups', zh: '扫描流动性足够的合约市场，找出极端涨跌、资金费率和杠杆急增', ja: '流動性のある先物市場で、極端な値動き・資金調達率・レバレッジ増加を探す' },
+      why: { en: 'Labels the structure behind a move (for example a short squeeze in the making) instead of just listing gainers', zh: '说明涨跌背后的结构（例如可能的轧空），而不只是列出涨幅榜', ja: '上昇率の一覧ではなく、値動きの構造（踏み上げの兆しなど）を示す' } },
+    { i: 'globe', h: { en: 'Regional language layer', zh: '地区语言层', ja: '地域言語レイヤー' },
+      does: { en: 'Turns one Simplified-Chinese source into Taiwan and Hong Kong Traditional with local finance terms', zh: '把一份简体内容转成台湾、香港繁体，并换成当地金融用语', ja: '簡体字の原稿を台湾・香港の繁体字と現地の金融用語に変換' },
+      why: { en: 'One content source, three markets, no hand-copied translations to drift apart', zh: '一份内容服务三个市场，不会因为手动维护多份翻译而走样', ja: '原稿は一つで 3 市場に対応。手作業の翻訳がずれていくことがない' } },
+  ];
+  const AGENTS = [
+    { i: 'route', h: { en: 'Release-night agent', zh: '数据公布夜智能体', ja: '指標発表ナイトエージェント' },
+      flow: { en: ['calendar trigger', 'fetch actual vs forecast', 'evidence engine', 'draft event card + posts', 'human approves', 'publish'], zh: ['日历触发', '抓实际值 vs 预期', '证据引擎', '起草事件卡片 + 帖子', '人工审核', '发布'], ja: ['カレンダーで起動', '実績と予想を取得', 'エビデンスエンジン', 'イベントカードと投稿を作成', '人が承認', '公開'] },
+      guards: { en: ['every number traced to a tool call', 'nothing ships without approval', 'platform rules checked'], zh: ['每个数字都来自工具调用', '没有审核不发布', '检查各平台规则'], ja: ['数字はすべてツール呼び出し由来', '承認なしでは公開しない', '各プラットフォームの規則を確認'] } },
+    { i: 'agent', h: { en: 'Ask TapeSense tutor', zh: '「问盘感」AI 导师', ja: '「TapeSense に質問」チューター' },
+      flow: { en: ['user question', 'read-only tools: quotes · releases · chains · evidence · glossary', 'answer names the chain and its evidence'], zh: ['用户提问', '只读工具：行情 · 公布日历 · 逻辑链 · 证据 · 术语', '回答说明是哪条链、证据在哪'], ja: ['ユーザーの質問', '読み取り専用ツール：相場・発表・チェーン・証拠・用語', 'どのチェーンか、根拠は何かを回答'] },
+      guards: { en: ['no buy or sell calls', 'per-request cost cap', 'golden-question tests'], zh: ['不给买卖建议', '每次提问有成本上限', '用标准问题集测试'], ja: ['売買の推奨はしない', 'リクエストごとのコスト上限', 'ゴールデン質問でテスト'] } },
+  ];
+  const PROBLEMS = [
+    { i: 'phone', p: { en: 'Remote testing without paying for app-store accounts', zh: '不付应用商店年费，也要让人远程测试', ja: 'ストア費用なしでリモートテストしたい' },
+      f: { en: 'Web build on a fixed hosted link; deploys are verified on the new build before the cached link updates', zh: '部署网页版到固定链接；先在新部署地址验证，再等固定链接的缓存更新', ja: '固定リンクで Web 版を公開。キャッシュ更新前に新しいデプロイで検証' } },
+    { i: 'globe', p: { en: 'Automatic Traditional conversion produced wrong Taiwan finance words', zh: '自动繁体转换产生了不对的台湾金融用词', ja: '自動繁体字変換で台湾の金融用語が誤った' },
+      f: { en: 'A regional term layer runs after conversion, with regression tests for every fix', zh: '在转换后加一层地区用语修正，每个修正都有回归测试', ja: '変換後に地域用語レイヤーを追加し、修正ごとに回帰テスト' } },
+    { i: 'eye', p: { en: 'The radar mislabelled a rally that shorts were piling into', zh: '雷达把"空头不断加仓的上涨"标错了类型', ja: 'ショートが積み上がる上昇をレーダーが誤分類' },
+      f: { en: 'Reordered the rules so who is paying funding decides first; locked in with tests on the real cases', zh: '调整规则顺序，先看哪一方在付资金费率；用真实案例写成测试锁住', ja: '資金調達率を払う側を先に判定するよう規則を並べ替え、実例でテスト' } },
+    { i: 'scale', p: { en: 'Signal reader and radar disagreed on the same coin', zh: '信号解读和雷达对同一个币给出不同结论', ja: '同じ銘柄でシグナルリーダーとレーダーが矛盾' },
+      f: { en: 'Extreme funding now carries more weight, and the reader shows the reason on screen', zh: '极端资金费率加重权重，并在画面上说明原因', ja: '極端な資金調達率の重みを上げ、理由を画面に表示' } },
+    { i: 'chart', p: { en: 'The 24-hour reaction came back empty for releases at :30', zh: '整点半公布的数据，24 小时反应量不出来', ja: '30 分発表の指標で 24 時間後の反応が空になった' },
+      f: { en: 'Fetch the hourly candles from earlier so the "before" price always exists', zh: '提早抓取小时 K 线，确保一定有"公布前"的价格', ja: '1 時間足を早めから取得し、「発表前」の価格を必ず確保' } },
+    { i: 'trace', p: { en: 'Analytics without adding a native SDK', zh: '不加原生 SDK 也要有数据分析', ja: 'ネイティブ SDK なしで分析したい' },
+      f: { en: 'Plain HTTP events that work on web and phone, anonymous with an opt-out, plus an in-app survey', zh: '用普通 HTTP 发事件，网页和手机都能用；匿名、可关闭，并加入 App 内问卷', ja: 'Web とスマホで動く HTTP イベント。匿名でオプトアウト可、アプリ内アンケート付き' } },
+  ];
+
+  let lang = 'en';
+  try { const s = localStorage.getItem('lang'); if (['en', 'zh', 'ja'].includes(s)) lang = s; else if ((navigator.language || '').startsWith('zh')) lang = 'zh'; else if ((navigator.language || '').startsWith('ja')) lang = 'ja'; } catch (e) {}
+  const asked = new URL(location.href).searchParams.get('lang');
+  if (['en', 'zh', 'ja'].includes(asked)) lang = asked;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const t = (k) => (C[lang][k] ?? window.I18N[lang][k] ?? C.en[k] ?? window.I18N.en[k] ?? k);
+  function render() {
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : lang;
+    document.querySelectorAll('[data-t]').forEach((el) => (el.textContent = t(el.dataset.t)));
+    document.querySelectorAll('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    document.getElementById('smartList').innerHTML = SMART.map((s) =>
+      `<div class="dtile">${window.icon(s.i)}<div><h3>${esc(s.h[lang])}</h3><p class="plus">${esc(s.does[lang])}</p><p class="why">${esc(s.why[lang])}</p></div></div>`).join('');
+    document.getElementById('agentList').innerHTML = AGENTS.map((a) =>
+      `<div class="dtile">${window.icon(a.i)}<div><span class="status">${esc(t('lbl.status'))}</span><h3>${esc(a.h[lang])}</h3><div class="flowsteps">${a.flow[lang].map((s, i) => `${i ? '<i>→</i>' : ''}<span${/approv|审核|承認/.test(s) ? ' class="human"' : ''}>${esc(s)}</span>`).join('')}</div><div class="guards">${a.guards[lang].map((g) => `<span>${esc(g)}</span>`).join('')}</div></div></div>`).join('');
+    document.getElementById('problemList').innerHTML = PROBLEMS.map((p) =>
+      `<div class="dtile">${window.icon(p.i)}<div><p class="minus" style="color:var(--ink)"><b>${esc(p.p[lang])}</b></p><p class="plus">${esc(p.f[lang])}</p></div></div>`).join('');
+  }
+  document.querySelectorAll('.langs button').forEach((b) => b.addEventListener('click', () => { lang = b.dataset.lang; try { localStorage.setItem('lang', lang); } catch (e) {} render(); }));
+  window.paintArt();
+  render();
+})();
+</script>
+</body>
+</html>

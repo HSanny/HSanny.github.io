@@ -156,7 +156,7 @@ window.WORK = [
     v: { en: 'Same test set before and after', zh: '前后用同一测试集', ja: '前後で同じテストセット' },
   },
   {
-    id: 'tapesense', badges: ['LIVE PRODUCT'], href: 'https://tapesense--preview.expo.app', external: true,
+    id: 'tapesense', badges: ['LIVE PRODUCT', 'CASE STUDY'], href: 'work/tapesense.html', caseStudy: true,
     t: { en: 'TapeSense · investing-logic app', zh: '盘感 · 投资逻辑 App', ja: 'TapeSense · 投資ロジックアプリ' },
     d: { en: 'How data releases move markets, checked against real prices.', zh: '经济数据如何影响市场，再用真实行情检验。', ja: '経済指標が市場をどう動かすかを、実際の値動きで検証。' },
     k: [['71', { en: 'tests', zh: '个测试', ja: 'テスト' }], ['12', { en: 'events vs real prices', zh: '个事件对照行情', ja: 'イベントを検証' }]],

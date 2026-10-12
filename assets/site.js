@@ -27,7 +27,7 @@
     const target = w.external ? ' target="_blank" rel="noopener"' : '';
     const badges = [...w.badges.map((b) => `<span class="badge${b === 'FLAGSHIP' || b === 'LIVE PRODUCT' ? ' amber' : ''}">${esc(b)}</span>`), w.soon ? `<span class="badge">${esc(t('case.soon'))}</span>` : ''].join('');
     const kpis = w.k.length ? `<div class="kpis">${w.k.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(L(l))}</span></div>`).join('')}</div>` : '';
-    return `<a class="card" href="${href}"${target}><div class="art">${window.ART[w.id] || ''}</div><div class="body"><div class="badges">${badges}</div><h3>${esc(L(w.t))}</h3><p>${esc(L(w.d))}</p>${kpis}<div class="verified">${window.icon('check')}<span>${esc(L(w.v))}</span></div><span class="more">${esc(w.flagship ? t('case.read') : t('case.open'))}</span></div></a>`;
+    return `<a class="card" href="${href}"${target}><div class="art">${window.ART[w.id] || ''}</div><div class="body"><div class="badges">${badges}</div><h3>${esc(L(w.t))}</h3><p>${esc(L(w.d))}</p>${kpis}<div class="verified">${window.icon('check')}<span>${esc(L(w.v))}</span></div><span class="more">${esc(w.flagship || w.caseStudy ? t('case.read') : t('case.open'))}</span></div></a>`;
   }
 
   function render() {
