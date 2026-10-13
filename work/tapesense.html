@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TapeSense macroeconomic knowledge graph · Sanny Hong</title>
-<meta name="description" content="TapeSense: macroeconomics modelled as a cause-and-effect graph, with every link tested against real market data. Self-updating graph and AI agents in progress.">
+<meta name="description" content="TapeSense: macroeconomics modelled as a cause-and-effect graph, with every link tested against real market data. Self-updating graph and AI agents in testing.">
 <script src="../assets/theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,7 +71,7 @@
           <div data-icon="route"><b>9</b><span data-t="t.k1"></span></div>
           <div data-icon="check"><b>12</b><span data-t="t.k2"></span></div>
           <div data-icon="globe"><b>4</b><span data-t="t.k3"></span></div>
-          <div data-icon="flask"><b>92</b><span data-t="t.k4"></span></div>
+          <div data-icon="flask"><b>117</b><span data-t="t.k4"></span></div>
         </div>
       </div>
     </section>
@@ -81,7 +81,7 @@
       <div>
         <h2 data-t="t.f.h"></h2>
         <p class="caption" data-t="t.f.p"></p>
-        <div class="diagram" role="img" aria-label="Data flow: four public data sources are normalised, feed four rule-based engines, pass through a language layer into the app, with anonymous analytics; in progress: a self-updating graph and agents that use it as read-only tools.">
+        <div class="diagram" role="img" aria-label="Data flow: four public data sources are normalised, feed four rule-based engines, pass through a language layer into the app, with anonymous analytics; in testing: a self-updating graph and agents that use it as read-only tools.">
           <svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg">
             <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--faint)"/></marker></defs>
             <g font-size="12" fill="var(--ink)">
@@ -116,7 +116,7 @@
               <text x="672" y="254" text-anchor="middle" font-weight="600">Analytics + survey</text><text x="672" y="272" text-anchor="middle" fill="var(--muted)" font-size="10">anonymous · opt-out</text>
 
               <rect x="368" y="340" width="380" height="84" rx="12" fill="none" stroke="var(--signal)" stroke-dasharray="5 4"/>
-              <text x="384" y="364" font-weight="600" fill="var(--signal)">In progress · self-updating graph + agents</text>
+              <text x="384" y="364" font-weight="600" fill="var(--signal)">In testing · self-updating graph + agents</text>
               <text x="384" y="386" fill="var(--muted)" font-size="10.5">link hit-rates · tutor · release-night · graph upkeep</text>
               <text x="384" y="404" fill="var(--muted)" font-size="10.5">graph as read-only tools · human approves</text>
             </g>
@@ -157,7 +157,7 @@
 <script src="../assets/i18n.js"></script>
 <script>
 /* TapeSense case study. The code is private (commercial product): describe what each part does and how
-   problems were solved, never exact rules, thresholds or formulas. Agents are marked as in progress until shipped. */
+   problems were solved, never exact rules, thresholds or formulas. AI parts are marked 'in testing' until they ship to users. */
 (function () {
   const C = {
     en: {
@@ -174,8 +174,9 @@
       't.k1': 'logic chains', 't.k2': 'events measured', 't.k3': 'languages', 't.k4': 'automated tests',
       't.f.h': 'From public data to a checked explanation',
       't.f.p': 'Four public sources, normalised once, feed four rule-based engines. A language layer turns one Simplified-Chinese source into Taiwan and Hong Kong wording.',
-      't.s.h': 'Four rule-based engines',
-      't.s.p': 'Deterministic by design: the same data always gives the same answer, so every result can be tested and explained.',
+      't.s.h': 'Rule-based engines, plus AI in testing',
+      't.s.p': 'The engines are deterministic: the same data always gives the same answer, so every result can be tested and explained. The AI parts use them as read-only tools and are in private testing.',
+      't.testing': 'In testing',
       't.back': '← Back to all work', 'lbl.does': 'Does', 'lbl.why': 'Why it matters',
     },
     zh: {
@@ -192,8 +193,9 @@
       't.k1': '条逻辑链', 't.k2': '个事件已实测', 't.k3': '种语言', 't.k4': '个自动化测试',
       't.f.h': '从公开数据到经过检验的解释',
       't.f.p': '四个公开数据源统一整理后，送进四个规则型引擎。语言层把同一份简体内容转成台湾和香港用语。',
-      't.s.h': '四个规则型引擎',
-      't.s.p': '刻意设计成确定性：同样的数据永远得到同样的结果，所以每个结果都能测试、能解释。',
+      't.s.h': '规则型引擎，加上测试中的 AI',
+      't.s.p': '引擎刻意设计成确定性：同样的数据永远得到同样的结果，每个结果都能测试、能解释。AI 部分把引擎当作只读工具使用，目前在内部测试。',
+      't.testing': '测试中',
       't.back': '← 返回全部项目', 'lbl.does': '做什么', 'lbl.why': '为什么重要',
     },
     ja: {
@@ -210,8 +212,9 @@
       't.k1': '本のロジックチェーン', 't.k2': '件のイベントを実測', 't.k3': '言語', 't.k4': '件の自動テスト',
       't.f.h': '公開データから、検証された説明へ',
       't.f.p': '4 つの公開データを一度正規化し、4 つのルールベースのエンジンへ。言語レイヤーが簡体字の原稿を台湾・香港の表現に変換します。',
-      't.s.h': '4 つのルールベースのエンジン',
-      't.s.p': '意図的に決定的な設計：同じデータなら常に同じ結果になり、すべてテストと説明が可能です。',
+      't.s.h': 'ルールベースのエンジンと、テスト中の AI',
+      't.s.p': 'エンジンは決定的な設計で、同じデータなら常に同じ結果になり、すべてテストと説明が可能です。AI 部分はエンジンを読み取り専用ツールとして使い、現在は非公開テスト中です。',
+      't.testing': 'テスト中',
       't.back': '← すべての実績へ戻る', 'lbl.does': '機能', 'lbl.why': '意義',
     },
   };
@@ -229,6 +232,15 @@
     { i: 'globe', h: { en: 'Regional language layer', zh: '地区语言层', ja: '地域言語レイヤー' },
       does: { en: 'Turns one Simplified-Chinese source into Taiwan and Hong Kong Traditional with local finance terms', zh: '把一份简体内容转成台湾、香港繁体，并换成当地金融用语', ja: '簡体字の原稿を台湾・香港の繁体字と現地の金融用語に変換' },
       why: { en: 'One content source, three markets, no hand-copied translations to drift apart', zh: '一份内容服务三个市场，不会因为手动维护多份翻译而走样', ja: '原稿は一つで 3 市場に対応。手作業の翻訳がずれていくことがない' } },
+    { i: 'agent', testing: true, h: { en: 'Ask TapeSense (AI tutor)', zh: '「问盘感」AI 导师', ja: '「TapeSense に質問」AI チューター' },
+      does: { en: 'A tool-calling agent answers questions by looking up the chains and measured events; the model key stays on the server', zh: '会调用工具的智能体：先查逻辑链和实测事件再回答；模型密钥只放在服务器上', ja: 'ツール呼び出し型エージェントがチェーンと実測イベントを調べて回答。モデルの鍵はサーバーのみ' },
+      why: { en: 'Citations come from the tool log, buy/sell advice is filtered, and every question has a cost cap', zh: '引用来自工具调用记录，买卖建议会被过滤，每题都有花费上限', ja: '引用はツール履歴から。売買の推奨は除外し、質問ごとにコスト上限' } },
+    { i: 'chart', testing: true, h: { en: 'Self-updating graph', zh: '自我更新的图谱', ja: '自己更新するグラフ' },
+      does: { en: "Each chain keeps a track record at 60 minutes and 24 hours, counted only from its own confirmed major events", zh: '每条链记录 60 分钟和 24 小时的成立次数，只计入它自己已证实的大事件', ja: '各チェーンが 60 分・24 時間の実績を記録。自分の確定した主要イベントのみ集計' },
+      why: { en: 'Validity before volume: related releases are kept as reference, never scored', zh: '有效性优先于数量：相关数据只作参考，不计入', ja: '量より妥当性：関連指標は参考扱いで集計しない' } },
+    { i: 'trace', testing: true, h: { en: 'Graph-maintenance agent', zh: '图谱维护智能体', ja: 'グラフ保守エージェント' },
+      does: { en: 'Drafts one evidence-backed change for a link that is not holding up', zh: '针对不太灵的连接，起草一条附证据的修改', ja: '外れが続くリンクに、根拠つきの修正案を 1 つ作成' },
+      why: { en: 'Code picks the target and checks the evidence; nothing changes without human approval', zh: '审查对象和证据都由代码检查，没有人工批准什么都不会改', ja: '対象と根拠はコードで検証。人の承認なしには何も変わらない' } },
   ];
   let lang = 'en';
   try { const s = localStorage.getItem('lang'); if (['en', 'zh', 'ja'].includes(s)) lang = s; else if ((navigator.language || '').startsWith('zh')) lang = 'zh'; else if ((navigator.language || '').startsWith('ja')) lang = 'ja'; } catch (e) {}
@@ -241,7 +253,7 @@
     document.querySelectorAll('[data-t]').forEach((el) => (el.textContent = t(el.dataset.t)));
     document.querySelectorAll('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     document.getElementById('smartList').innerHTML = SMART.map((s) =>
-      `<div class="dtile">${window.icon(s.i)}<div><h3>${esc(s.h[lang])}</h3><p class="plus">${esc(s.does[lang])}</p><p class="why">${esc(s.why[lang])}</p></div></div>`).join('');
+      `<div class="dtile">${window.icon(s.i)}<div>${s.testing ? `<span class="status">${esc(t('t.testing'))}</span>` : ''}<h3>${esc(s.h[lang])}</h3><p class="plus">${esc(s.does[lang])}</p><p class="why">${esc(s.why[lang])}</p></div></div>`).join('');
   }
   document.querySelectorAll('.langs button').forEach((b) => b.addEventListener('click', () => { lang = b.dataset.lang; try { localStorage.setItem('lang', lang); } catch (e) {} render(); }));
   window.paintArt();

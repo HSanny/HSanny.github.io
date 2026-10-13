@@ -158,8 +158,8 @@ window.WORK = [
   {
     id: 'tapesense', badges: ['PRIVATE BETA', 'CASE STUDY'], href: 'work/tapesense.html', caseStudy: true,
     t: { en: 'TapeSense · macroeconomic knowledge graph', zh: '盘感 · 宏观经济知识图谱', ja: 'TapeSense · マクロ経済ナレッジグラフ' },
-    d: { en: 'Macro cause and effect as a graph, each link tested against real prices. Self-updating graph and agents in progress.', zh: '把宏观因果建成图谱，每条链用真实行情检验。自我更新的图谱和智能体开发中。', ja: 'マクロの因果をグラフ化し、各リンクを実際の値動きで検証。自己更新グラフとエージェントは開発中。' },
-    k: [['92', { en: 'tests', zh: '个测试', ja: 'テスト' }], ['12', { en: 'events vs real prices', zh: '个事件对照行情', ja: 'イベントを検証' }]],
+    d: { en: 'Macro cause and effect as a graph, each link tested against real prices. Self-updating graph and AI agents in testing.', zh: '把宏观因果建成图谱，每条链用真实行情检验。自我更新的图谱和 AI 智能体测试中。', ja: 'マクロの因果をグラフ化し、各リンクを実際の値動きで検証。自己更新グラフと AI エージェントはテスト中。' },
+    k: [['117', { en: 'tests', zh: '个测试', ja: 'テスト' }], ['12', { en: 'events vs real prices', zh: '个事件对照行情', ja: 'イベントを検証' }]],
     v: { en: 'Each link measured after every release, marked matched or missed', zh: '每次公布后实测每条链，标记符合 / 不符', ja: '発表ごとに各リンクを実測し一致 / 不一致を表示' },
   },
   {
