@@ -87,7 +87,7 @@
       ${staffTicks}
       <rect x="130" y="8" width="44" height="122" rx="4" fill="none" stroke="var(--signal)" stroke-width="1.6" stroke-dasharray="5 4"/>
       <path d="M118 96 H198" stroke="var(--ok)" stroke-width="2"/>
-      <text x="202" y="88" font-size="11" fill="var(--ok)">± ~1px</text>
+      <text x="202" y="88" font-size="11" fill="var(--ok)">level read</text>
       <g transform="translate(34 30)" stroke="var(--muted)" stroke-width="1.4" fill="none">
         <rect x="8" y="8" width="36" height="36" rx="4" fill="var(--panel)"/><rect x="17" y="17" width="18" height="18" rx="2"/>
         <path d="M16 2v6M26 2v6M36 2v6M16 44v6M26 44v6M36 44v6M2 16h6M2 26h6M2 36h6M44 16h6M44 26h6M44 36h6"/></g>
@@ -113,16 +113,16 @@
       <path d="M198 14v94" stroke="var(--faint)" stroke-dasharray="3 3"/>
       <text x="204" y="20" font-size="10" fill="var(--signal)">forecast</text>
       <g transform="translate(22 14)"><rect width="74" height="26" rx="8" fill="var(--panel)" stroke="var(--rule)"/><text x="37" y="17" text-anchor="middle" font-size="10" fill="var(--muted)">+ evidence</text></g>`),
-    motion: S(`
-      <g transform="translate(18 44)" stroke="var(--ink)" stroke-width="1.4" fill="var(--panel)">
-        <rect x="0" y="6" width="40" height="28" rx="5"/><path d="M40 14l14-7v26l-14-7z"/><circle cx="20" cy="20" r="7" fill="none"/></g>
-      <path d="M200 10v112" stroke="var(--signal)" stroke-width="1.8" stroke-dasharray="6 5"/>
-      <path d="M96 96 C140 90 170 70 236 54" stroke="var(--water)" stroke-width="1.6" fill="none" stroke-dasharray="2 4"/>
-      <path d="M100 40 C150 46 180 60 262 84" stroke="var(--water)" stroke-width="1.6" fill="none" stroke-dasharray="2 4"/>
-      <rect x="226" y="44" width="20" height="20" rx="3" fill="none" stroke="var(--water)" stroke-width="1.6"/><circle cx="236" cy="54" r="3" fill="var(--water)"/>
-      <rect x="252" y="74" width="20" height="20" rx="3" fill="none" stroke="var(--water)" stroke-width="1.6"/><circle cx="262" cy="84" r="3" fill="var(--water)"/>
-      <rect x="150" y="100" width="20" height="20" rx="3" fill="none" stroke="var(--faint)" stroke-width="1.6"/><circle cx="160" cy="110" r="3" fill="var(--faint)"/>
-      <text x="208" y="24" font-size="11" fill="var(--signal)">+2</text>`),
+    intel: S(`
+      <g font-size="10" text-anchor="middle">
+        <rect x="14" y="18" width="70" height="30" rx="6" fill="var(--panel)" stroke="var(--rule)"/><text x="49" y="37" fill="var(--muted)">reports</text>
+        <rect x="14" y="82" width="70" height="30" rx="6" fill="var(--panel)" stroke="var(--rule)"/><text x="49" y="101" fill="var(--muted)">financials</text>
+        <rect x="124" y="46" width="76" height="38" rx="8" fill="var(--signal-soft)" stroke="var(--signal)"/><text x="162" y="69" fill="var(--signal)">supervisor</text>
+        <rect x="236" y="10" width="72" height="26" rx="6" fill="var(--panel)" stroke="var(--rule)"/><text x="272" y="27" fill="var(--muted)">research</text>
+        <rect x="236" y="52" width="72" height="26" rx="6" fill="var(--panel)" stroke="var(--rule)"/><text x="272" y="69" fill="var(--muted)">fit score</text>
+        <rect x="236" y="94" width="72" height="26" rx="6" fill="var(--panel)" stroke="var(--water)"/><text x="272" y="111" fill="var(--water)">draft → you</text>
+      </g>
+      <path d="M84 33 L124 58 M84 97 L124 72 M200 60 L236 23 M200 65 L236 65 M200 70 L236 107" stroke="var(--faint)" stroke-width="1.4" fill="none"/>`),
   };
 
   // Hero: the delivery loop used on every project. Labels come from the page language.
